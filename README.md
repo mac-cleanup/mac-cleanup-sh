@@ -3,7 +3,7 @@ Cleanup script for OSX
 
 ## Install:
 Download:
-`curl -sS https://raw.githubusercontent.com/fwartner/mac-cleanup/master/cleanup.sh`
+`curl -o https://raw.githubusercontent.com/fwartner/mac-cleanup/master/cleanup.sh`
 
 Make it executable:
 `chmod +x cleanup.sh`
