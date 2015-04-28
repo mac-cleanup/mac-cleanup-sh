@@ -2,7 +2,11 @@
 Cleanup script for OSX
 
 ## Install:
+Download:
+`curl -sS https://raw.githubusercontent.com/fwartner/mac-cleanup/master/cleanup.sh`
 
-`curl -sS https://raw.githubusercontent.com/fwartner/mac-cleanup/master/cleanup.sh
-chmod +x cleanup.sh
-sudo mv /usr/local/bin/cleanup`
+Make it executable:
+`chmod +x cleanup.sh`
+
+Move to make it globally usable:
+`sudo mv /usr/local/bin/cleanup`
