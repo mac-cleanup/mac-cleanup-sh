@@ -33,4 +33,7 @@ brew cleanup --force -s &>/dev/null
 rm -rfv /Library/Caches/Homebrew/* &>/dev/null
 brew tap --repair &>/dev/null
 
+echo 'Cleanup any old versions of gems'
+gem cleanup &>/dev/null
+
 clear && echo 'Everything is cleaned up :3'
