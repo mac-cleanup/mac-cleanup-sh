@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 # Ask for the administrator password upfront
-echo 'Please enter your password to grant sudo-rights:'
-sudo -v
+if [ "$EUID" -ne 0  ] ;then
+	echo "Please run as root"
+	exit
+fi
 
 echo 'Empty the Trash on all mounted volumes and the main HDD...'
 sudo rm -rfv /Volumes/*/.Trashes &>/dev/null
@@ -35,5 +37,8 @@ brew tap --repair &>/dev/null
 
 echo 'Cleanup any old versions of gems'
 gem cleanup &>/dev/null
+
+echo 'Purge inactive memory...'
+purge
 
 clear && echo 'Everything is cleaned up :3'
