@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Ask for the administrator password upfront
-if [ "$EUID" -ne 0  ] ;then
+if [ "$EUID" -ne 0  ]; then
 	echo "Please run as root"
 	exit
 fi
@@ -32,6 +32,7 @@ rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
 
 echo 'Cleanup Homebrew Cache...'
 brew cleanup --force -s &>/dev/null
+brew cask cleanup &>/dev/null
 rm -rfv /Library/Caches/Homebrew/* &>/dev/null
 brew tap --repair &>/dev/null
 
