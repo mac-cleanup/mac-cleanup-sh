@@ -24,3 +24,16 @@ Make it executable:
 
 Move to make it globally usable:
 `sudo mv cleanup /usr/local/bin/cleanup`
+
+
+## Uninstall
+
+```bash
+curl -fsSL "https://raw.githubusercontent.com/tonydeng/mac-cleanup/master/installer.sh" | bash -s uninstall
+```
+
+## Update
+
+```bash
+curl -fsSL "https://raw.githubusercontent.com/tonydeng/mac-cleanup/master/installer.sh" | bash -s update
+```
