@@ -6,13 +6,13 @@ Cleanup script for OSX
 **use curl**
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/tonydeng/mac-cleanup/master/installer.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh)"
 ```
 
 **use wget**
 
 ```bash
-sh -c "$(wget https://raw.githubusercontent.com/tonydeng/mac-cleanup/master/installer.sh -O -)"
+sh -c "$(wget https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh -O -)"
 ```
 
 ## Step by step Install:
@@ -29,11 +29,11 @@ Move to make it globally usable:
 ## Uninstall
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/tonydeng/mac-cleanup/master/installer.sh" | bash -s uninstall
+curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh" | bash -s uninstall
 ```
 
 ## Update
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/tonydeng/mac-cleanup/master/installer.sh" | bash -s update
+curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh" | bash -s update
 ```
