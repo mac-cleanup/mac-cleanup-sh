@@ -40,6 +40,6 @@ echo 'Cleanup any old versions of gems'
 gem cleanup &>/dev/null
 
 echo 'Purge inactive memory...'
-purge
+sudo purge
 
 clear && echo 'Everything is cleaned up :3'
