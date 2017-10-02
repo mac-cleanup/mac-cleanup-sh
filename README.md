@@ -1,6 +1,17 @@
 # mac-cleanup
 Cleanup script for OSX
 
+**It does the following cleanup tasks:**
+* Empty the Trash on all mounted volumes and the main HDD
+* Clear System Log Files
+* Clear Adobe Cache Files
+* Cleanup iOS Applications
+* Remove iOS Device Backups
+* Cleanup XCode Derived Data and Archives
+* Cleanup Homebrew Cache
+* Cleanup any old versions of gems
+* Purge inactive memory
+
 ## Automatic Install:
 
 **use curl**
