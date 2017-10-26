@@ -10,6 +10,7 @@ Cleanup script for OSX
 * Cleanup XCode Derived Data and Archives
 * Cleanup Homebrew Cache
 * Cleanup any old versions of gems
+* Cleanup dangling docker images
 * Purge inactive memory
 
 ## Automatic Install:
