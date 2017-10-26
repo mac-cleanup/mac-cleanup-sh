@@ -51,6 +51,9 @@ brew tap --repair &>/dev/null
 echo 'Cleanup any old versions of gems'
 gem cleanup &>/dev/null
 
+echo 'Cleanup Docker <none> images'
+docker rmi -f $(docker images -q --filter 'dangling=true')
+
 echo 'Purge inactive memory...'
 sudo purge
 
