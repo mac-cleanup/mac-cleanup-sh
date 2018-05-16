@@ -5,7 +5,7 @@ bytesToHuman() {
     while ((b > 1024)); do
         d="$(printf ".%02d" $((b % 1024 * 100 / 1024)))"
         b=$((b / 1024))
-        let s++
+        (( s++ ))
     done
     echo "$b$d ${S[$s]} of space was cleaned up :3"
 }
