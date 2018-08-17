@@ -54,6 +54,9 @@ gem cleanup &>/dev/null
 echo 'Remove pip cache...'
 rm -rfv ~/Library/Caches/pip
 
+echo 'Cleanup npm cache...'
+npm cache clean --force
+
 if type "docker" > /dev/null; then
     echo 'Cleanup Docker'
     docker container prune -f
