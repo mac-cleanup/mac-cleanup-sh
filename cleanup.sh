@@ -51,6 +51,9 @@ brew tap --repair &>/dev/null
 echo 'Cleanup any old versions of gems'
 gem cleanup &>/dev/null
 
+echo 'Remove pip cache...'
+rm -rfv ~/Library/Caches/pip
+
 if type "docker" > /dev/null; then
     echo 'Cleanup Docker'
     docker container prune -f
