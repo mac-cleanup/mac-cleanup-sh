@@ -73,6 +73,11 @@ if type "npm" > /dev/null; then
     npm cache clean --force
 fi
 
+if type "yarn" > /dev/null; then
+    echo 'Cleanup Yarn Cache...'
+    yarn cache clean --force
+fi
+
 echo 'Purge inactive memory...'
 sudo purge
 
