@@ -42,10 +42,14 @@ echo 'Cleanup XCode Derived Data and Archives...'
 rm -rfv ~/Library/Developer/Xcode/DerivedData/* &>/dev/null
 rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
 
+echo 'Update Homebrew Recipes...'
+brew update
+echo 'Upgrade and remove outdated formulae'
+brew upgrade --cleanup
 echo 'Cleanup Homebrew Cache...'
-brew cleanup --force -s &>/dev/null
+brew cleanup -s &>/dev/null
 brew cask cleanup &>/dev/null
-rm -rfv /Library/Caches/Homebrew/* &>/dev/null
+rm -rfv $(brew --cache) &>/dev/nul
 brew tap --repair &>/dev/null
 
 echo 'Cleanup any old versions of gems'
