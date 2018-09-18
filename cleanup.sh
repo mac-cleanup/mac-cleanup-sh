@@ -68,6 +68,11 @@ if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
     rm -rfv $PYENV_VIRTUALENV_CACHE_PATH &>/dev/null
 fi
 
+if type "npm" > /dev/null; then
+    echo 'Cleanup npm cache...'
+    npm cache clean --force
+fi
+
 echo 'Purge inactive memory...'
 sudo purge
 
