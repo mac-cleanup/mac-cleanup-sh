@@ -11,10 +11,10 @@ bytesToHuman() {
 }
 
 # Ask for the administrator password upfront
-if [ "$EUID" -ne 0  ]; then
-	echo "Please run as root"
-	exit
-fi
+sudo -v
+
+# Keep-alive sudo until `clenaup.sh` has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 oldAvailable=$(df / | tail -1 | awk '{print $4}')
 
@@ -42,10 +42,14 @@ echo 'Cleanup XCode Derived Data and Archives...'
 rm -rfv ~/Library/Developer/Xcode/DerivedData/* &>/dev/null
 rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
 
+echo 'Update Homebrew Recipes...'
+brew update
+echo 'Upgrade and remove outdated formulae'
+brew upgrade --cleanup
 echo 'Cleanup Homebrew Cache...'
-brew cleanup --force -s &>/dev/null
+brew cleanup -s &>/dev/null
 brew cask cleanup &>/dev/null
-rm -rfv /Library/Caches/Homebrew/* &>/dev/null
+rm -rfv $(brew --cache) &>/dev/nul
 brew tap --repair &>/dev/null
 
 echo 'Cleanup any old versions of gems'
@@ -57,6 +61,21 @@ if type "docker" > /dev/null; then
     docker image prune -f
     docker volume prune -f
     docker network prune -f
+fi
+
+if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
+    echo 'Removing Pyenv-VirtualEnv Cache...'
+    rm -rfv $PYENV_VIRTUALENV_CACHE_PATH &>/dev/null
+fi
+
+if type "npm" > /dev/null; then
+    echo 'Cleanup npm cache...'
+    npm cache clean --force
+fi
+
+if type "yarn" > /dev/null; then
+    echo 'Cleanup Yarn Cache...'
+    yarn cache clean --force
 fi
 
 echo 'Purge inactive memory...'
