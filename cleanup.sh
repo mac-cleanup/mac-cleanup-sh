@@ -11,10 +11,10 @@ bytesToHuman() {
 }
 
 # Ask for the administrator password upfront
-if [ "$EUID" -ne 0  ]; then
-	echo "Please run as root"
-	exit
-fi
+sudo -v
+
+# Keep-alive sudo until `clenaup.sh` has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 oldAvailable=$(df / | tail -1 | awk '{print $4}')
 
