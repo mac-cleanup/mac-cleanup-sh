@@ -63,6 +63,11 @@ if type "docker" > /dev/null; then
     docker network prune -f
 fi
 
+if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
+    echo 'Removing Pyenv-VirtualEnv Cache...'
+    rm -rfv $PYENV_VIRTUALENV_CACHE_PATH &>/dev/null
+fi
+
 echo 'Purge inactive memory...'
 sudo purge
 
