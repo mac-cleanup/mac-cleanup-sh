@@ -7,7 +7,7 @@ bytesToHuman() {
         b=$((b / 1024))
         (( s++ ))
     done
-    echo "$b$d ${S[$s]} of space was cleaned up :3"
+    echo "$b$d ${S[$s]} of space was cleaned up"
 }
 
 # Ask for the administrator password upfront
@@ -19,8 +19,8 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 oldAvailable=$(df / | tail -1 | awk '{print $4}')
 
 echo 'Empty the Trash on all mounted volumes and the main HDD...'
-sudo rm -rfv /Volumes/*/.Trashes &>/dev/null
-sudo rm -rfv ~/.Trash &>/dev/null
+sudo rm -rfv /Volumes/*/.Trashes/* &>/dev/null
+sudo rm -rfv ~/.Trash/* &>/dev/null
 
 echo 'Clear System Log Files...'
 sudo rm -rfv /private/var/log/asl/*.asl &>/dev/null
@@ -42,20 +42,24 @@ echo 'Cleanup XCode Derived Data and Archives...'
 rm -rfv ~/Library/Developer/Xcode/DerivedData/* &>/dev/null
 rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
 
-echo 'Update Homebrew Recipes...'
-brew update
-echo 'Upgrade and remove outdated formulae'
-brew upgrade --cleanup
-echo 'Cleanup Homebrew Cache...'
-brew cleanup -s &>/dev/null
-brew cask cleanup &>/dev/null
-rm -rfv $(brew --cache) &>/dev/nul
-brew tap --repair &>/dev/null
+if type "brew" &>/dev/null; then
+    echo 'Update Homebrew Recipes...'
+    brew update
+    echo 'Upgrade and remove outdated formulae'
+    brew upgrade --cleanup
+    echo 'Cleanup Homebrew Cache...'
+    brew cleanup -s &>/dev/null
+    #brew cask cleanup &>/dev/null
+    rm -rfv $(brew --cache) &>/dev/null
+    brew tap --repair &>/dev/null
+fi
 
-echo 'Cleanup any old versions of gems'
-gem cleanup &>/dev/null
+if type "docker" &> /dev/null; then
+    echo 'Cleanup any old versions of gems'
+    gem cleanup &>/dev/null
+fi    
 
-if type "docker" > /dev/null; then
+if type "docker" &> /dev/null; then
     echo 'Cleanup Docker'
     docker container prune -f
     docker image prune -f
@@ -68,12 +72,12 @@ if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
     rm -rfv $PYENV_VIRTUALENV_CACHE_PATH &>/dev/null
 fi
 
-if type "npm" > /dev/null; then
+if type "npm" &> /dev/null; then
     echo 'Cleanup npm cache...'
     npm cache clean --force
 fi
 
-if type "yarn" > /dev/null; then
+if type "yarn" &> /dev/null; then
     echo 'Cleanup Yarn Cache...'
     yarn cache clean --force
 fi
@@ -81,9 +85,9 @@ fi
 echo 'Purge inactive memory...'
 sudo purge
 
-clear && echo 'Success!'
+echo 'Success!'
 
 newAvailable=$(df / | tail -1 | awk '{print $4}')
-count=$((newAvailable-oldAvailable))
-count=$(( $count * 512))
+count=$((oldAvailable - newAvailable))
+#count=$(( $count * 512))
 bytesToHuman $count
