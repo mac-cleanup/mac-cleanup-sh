@@ -54,10 +54,10 @@ if type "brew" &>/dev/null; then
     brew tap --repair &>/dev/null
 fi
 
-if type "docker" &> /dev/null; then
+if type "gem" &> /dev/null; then
     echo 'Cleanup any old versions of gems'
     gem cleanup &>/dev/null
-fi    
+fi
 
 if type "docker" &> /dev/null; then
     echo 'Cleanup Docker'
