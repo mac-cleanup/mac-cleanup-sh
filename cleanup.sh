@@ -46,7 +46,7 @@ if type "brew" &>/dev/null; then
     echo 'Update Homebrew Recipes...'
     brew update
     echo 'Upgrade and remove outdated formulae'
-    brew upgrade --cleanup
+    brew upgrade
     echo 'Cleanup Homebrew Cache...'
     brew cleanup -s &>/dev/null
     #brew cask cleanup &>/dev/null
