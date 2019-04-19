@@ -12,6 +12,8 @@ Cleanup script for OSX
 * Cleanup any old versions of gems
 * Cleanup dangling docker images
 * Purge inactive memory
+* Cleanup npm cache
+* Cleanup yarn cache
 
 ## Automatic Install:
 
