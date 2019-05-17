@@ -14,6 +14,7 @@ Cleanup script for OSX
 * Purge inactive memory
 * Cleanup npm cache
 * Cleanup yarn cache
+* Cleanup docker images/stoped  containers
 
 ## Automatic Install:
 
