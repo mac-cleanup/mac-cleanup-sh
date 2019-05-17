@@ -82,6 +82,14 @@ if type "yarn" &> /dev/null; then
     yarn cache clean --force
 fi
 
+if type "docker" &> /dev/null; then
+    echo 'Cleanup docker images...'
+    docker rmi $(docker images -q)
+    echo 'Cleanup stopped containers with...'
+    docker rm $(docker ps -a -q)
+
+fi
+
 echo 'Purge inactive memory...'
 sudo purge
 
