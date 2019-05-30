@@ -1,22 +1,20 @@
 # mac-cleanup
 
-Cleanup script for macOS
+A cleanup script for macOS that runs the following tasks:
 
-**It does the following cleanup tasks:**
-
-* Empty the Trash on all mounted volumes and the main HDD
+* Empty the Trash on All Mounted Volumes and the Main HDD
 * Clear System Log Files
 * Clear Adobe Cache Files
 * Cleanup iOS Applications
 * Remove iOS Device Backups
-* Cleanup XCode Derived Data and Archives
+* Cleanup Xcode Derived Data and Archives
 * Cleanup Homebrew Cache
-* Cleanup any old versions of gems
-* Cleanup dangling docker images
-* Purge inactive memory
-* Cleanup npm cache
-* Cleanup yarn cache
-* Cleanup docker images and stopped  containers
+* Cleanup Any Old Versions of Gems
+* Cleanup Dangling Docker Images
+* Purge Inactive Memory
+* Cleanup npm Cache
+* Cleanup Yarn Cache
+* Cleanup Docker Images and Stopped Containers
 
 ## Install Automatically
 
