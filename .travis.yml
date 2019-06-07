@@ -11,10 +11,10 @@ branches:
     - master
 
 install:
-  - set -e && bash install.sh
+  - set -e && bash ./install.sh
 
 script:
-  - set -e && bash cleanup.sh
+  - set -e && bash ./cleanup.sh
 
 notifications:
   email: false
