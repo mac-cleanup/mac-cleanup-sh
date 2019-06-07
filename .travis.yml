@@ -1,0 +1,20 @@
+sudo: true
+
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode10
+  fast_finish: true
+
+branches:
+  only:
+    - master
+
+install:
+  - set -e && bash install.sh
+
+script:
+  - set -e && bash cleanup.sh
+
+notifications:
+  email: false
