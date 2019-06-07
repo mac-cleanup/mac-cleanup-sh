@@ -11,7 +11,7 @@ branches:
     - master
 
 install:
-  - set -e && ./install.sh
+  - set -e && ./installer.sh
 
 script:
   - set -e && ./cleanup.sh
