@@ -42,6 +42,9 @@ echo 'Cleanup XCode Derived Data and Archives...'
 rm -rfv ~/Library/Developer/Xcode/DerivedData/* &>/dev/null
 rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
 
+echo 'Cleanup pip cache...'
+rm -rfv ~/Library/Caches/pip
+
 if type "brew" &>/dev/null; then
     echo 'Update Homebrew Recipes...'
     brew update
@@ -61,10 +64,7 @@ fi
 
 if type "docker" &> /dev/null; then
     echo 'Cleanup Docker'
-    docker container prune -f
-    docker image prune -f
-    docker volume prune -f
-    docker network prune -f
+    docker system prune -af
 fi
 
 if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
@@ -80,14 +80,6 @@ fi
 if type "yarn" &> /dev/null; then
     echo 'Cleanup Yarn Cache...'
     yarn cache clean --force
-fi
-
-if type "docker" &> /dev/null; then
-    echo 'Cleanup docker images...'
-    docker rmi $(docker images -q)
-    echo 'Cleanup stopped containers with...'
-    docker rm $(docker ps -a -q)
-
 fi
 
 echo 'Purge inactive memory...'
