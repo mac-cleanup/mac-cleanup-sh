@@ -1,4 +1,4 @@
-# mac-cleanup
+# mac-cleanup [![Build Status](https://travis-ci.org/fwartner/mac-cleanup.svg?branch=master)](https://travis-ci.org/fwartner/mac-cleanup)
 
 A cleanup script for macOS that runs the following tasks:
 
