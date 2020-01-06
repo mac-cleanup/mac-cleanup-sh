@@ -13,6 +13,8 @@ bytesToHuman() {
 # Ask for the administrator password upfront
 sudo -v
 
+HOST=$( whoami )
+
 # Keep-alive sudo until `clenaup.sh` has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
@@ -44,6 +46,11 @@ rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
 
 echo 'Cleanup pip cache...'
 rm -rfv ~/Library/Caches/pip
+
+if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
+    echo 'Cleanup CocoaPods cache...'
+    rm -rfv ~/Library/Caches/CocoaPods/* &>/dev/null
+fi
 
 if type "brew" &>/dev/null; then
     echo 'Update Homebrew Recipes...'
