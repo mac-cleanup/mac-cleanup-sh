@@ -15,6 +15,9 @@ A cleanup script for macOS that runs the following tasks:
 * Cleanup npm Cache
 * Cleanup Yarn Cache
 * Cleanup Docker Images and Stopped Containers
+* Cleanup CocoaPods Cache Files
+* Cleanup Google Chrome Cache Files
+* Cleanup composer cache
 
 ## Install Automatically
 
