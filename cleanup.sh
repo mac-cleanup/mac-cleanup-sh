@@ -52,6 +52,12 @@ if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
     rm -rfv ~/Library/Caches/CocoaPods/* &>/dev/null
 fi
 
+# support delete Google Chrome caches
+if [ -d "/Users/${HOST}/Library/Caches/Google/Chrome" ]; then
+    echo 'Cleanup Google Chrome cache...'
+    rm -rfv ~/Library/Caches/Google/Chrome/* &> /dev/null
+fi
+
 if type "brew" &>/dev/null; then
     echo 'Update Homebrew Recipes...'
     brew update
