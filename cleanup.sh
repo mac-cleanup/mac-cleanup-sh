@@ -58,6 +58,11 @@ if [ -d "/Users/${HOST}/Library/Caches/Google/Chrome" ]; then
     rm -rfv ~/Library/Caches/Google/Chrome/* &> /dev/null
 fi
 
+if type "composer" &> /dev/null; then
+    echo 'Cleanup composer...'
+    composer clearcache &> /dev/null
+fi
+
 if type "brew" &>/dev/null; then
     echo 'Update Homebrew Recipes...'
     brew update
