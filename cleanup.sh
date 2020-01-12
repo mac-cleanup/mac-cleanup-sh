@@ -10,6 +10,27 @@ bytesToHuman() {
     echo "$b$d ${S[$s]} of space was cleaned up"
 }
 
+# Default arguments
+doUpdates=true
+
+# Take in arguments
+# Can add more arguments in the future
+while getopts ":n" opt; do
+  case ${opt} in
+    n ) doUpdates=false
+      ;;
+    \? )
+        printf 'A Mac Cleanup Utility by fwartner\n'
+        printf 'https://github.com/fwartner/mac-cleanup\n\n'
+        printf 'USAGE:\n cleanup [FLAGS]\n\n'
+        printf 'FLAGS:\n'
+        printf -- '-?,   prints help menu\n'
+        printf -- '-n    no brew updates\n'
+        exit
+      ;;
+  esac
+done
+
 # Ask for the administrator password upfront
 sudo -v
 
@@ -64,10 +85,12 @@ if type "composer" &> /dev/null; then
 fi
 
 if type "brew" &>/dev/null; then
-    echo 'Update Homebrew Recipes...'
-    brew update
-    echo 'Upgrade and remove outdated formulae'
-    brew upgrade
+    if $doUpdates; then
+        echo 'Update Homebrew Recipes...'
+        brew update
+        echo 'Upgrade and remove outdated formulae'
+        brew upgrade
+    fi
     echo 'Cleanup Homebrew Cache...'
     brew cleanup -s &>/dev/null
     #brew cask cleanup &>/dev/null

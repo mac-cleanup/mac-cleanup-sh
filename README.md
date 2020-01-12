@@ -2,22 +2,22 @@
 
 A cleanup script for macOS that runs the following tasks:
 
-* Empty the Trash on All Mounted Volumes and the Main HDD
-* Clear System Log Files
-* Clear Adobe Cache Files
-* Cleanup iOS Applications
-* Remove iOS Device Backups
-* Cleanup Xcode Derived Data and Archives
-* Cleanup Homebrew Cache
-* Cleanup Any Old Versions of Gems
-* Cleanup Dangling Docker Images
-* Purge Inactive Memory
-* Cleanup npm Cache
-* Cleanup Yarn Cache
-* Cleanup Docker Images and Stopped Containers
-* Cleanup CocoaPods Cache Files
-* Cleanup Google Chrome Cache Files
-* Cleanup composer cache
+- Empty the Trash on All Mounted Volumes and the Main HDD
+- Clear System Log Files
+- Clear Adobe Cache Files
+- Cleanup iOS Applications
+- Remove iOS Device Backups
+- Cleanup Xcode Derived Data and Archives
+- Cleanup Homebrew Cache
+- Cleanup Any Old Versions of Gems
+- Cleanup Dangling Docker Images
+- Purge Inactive Memory
+- Cleanup npm Cache
+- Cleanup Yarn Cache
+- Cleanup Docker Images and Stopped Containers
+- Cleanup CocoaPods Cache Files
+- Cleanup Google Chrome Cache Files
+- Cleanup composer cache
 
 ## Install Automatically
 
@@ -49,6 +49,30 @@ curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/instal
 
 ```bash
 curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh" | bash -s uninstall
+```
+
+## Usage Options
+
+Help menu:
+
+```
+$ cleanup -?
+
+A Mac Cleanup Utility by fwartner
+https://github.com/fwartner/mac-cleanup
+
+USAGE:
+ cleanup [FLAGS]
+
+FLAGS:
+-?,   prints help menu
+-n    no brew updates
+```
+
+Clean up without homebrew updates:
+
+```
+$ cleanup -n
 ```
 
 ## Contributors
