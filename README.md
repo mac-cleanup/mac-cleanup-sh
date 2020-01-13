@@ -51,6 +51,30 @@ curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/instal
 curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh" | bash -s uninstall
 ```
 
+## Usage Options
+
+Help menu:
+
+```
+$ cleanup -?
+
+A Mac Cleanup Utility by fwartner
+https://github.com/fwartner/mac-cleanup
+
+USAGE:
+ cleanup [FLAGS]
+
+FLAGS:
+-?,   prints help menu
+-n    no brew updates
+```
+
+Clean up without homebrew updates:
+
+```
+$ cleanup -n
+```
+
 ## Contributors
 
 ### Code Contributors
