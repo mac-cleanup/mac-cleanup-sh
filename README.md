@@ -56,7 +56,7 @@ curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/instal
 Help menu:
 
 ```
-$ cleanup -?
+$ cleanup -h
 
 A Mac Cleanup Utility by fwartner
 https://github.com/fwartner/mac-cleanup
@@ -65,7 +65,7 @@ USAGE:
  cleanup [FLAGS]
 
 FLAGS:
--?,   prints help menu
+-h,   prints help menu
 -n    no brew updates
 ```
 
