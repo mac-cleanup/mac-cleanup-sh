@@ -24,7 +24,7 @@ while getopts ":n" opt; do
         printf 'https://github.com/fwartner/mac-cleanup\n\n'
         printf 'USAGE:\n cleanup [FLAGS]\n\n'
         printf 'FLAGS:\n'
-        printf -- '-?,   prints help menu\n'
+        printf -- '-h,   prints help menu\n'
         printf -- '-n    no brew updates\n'
         exit
       ;;
