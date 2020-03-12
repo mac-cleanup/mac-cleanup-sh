@@ -79,6 +79,12 @@ if [ -d "/Users/${HOST}/Library/Caches/Google/Chrome" ]; then
     rm -rfv ~/Library/Caches/Google/Chrome/* &> /dev/null
 fi
 
+# support delete gradle caches
+if [ -d "/Users/${HOST}/.gradle/caches" ]; then
+    echo 'Cleanup Gradle cache...'
+    rm -rfv ~/.gradle/caches/ &> /dev/null
+fi
+
 if type "composer" &> /dev/null; then
     echo 'Cleanup composer...'
     composer clearcache &> /dev/null
