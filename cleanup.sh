@@ -65,6 +65,14 @@ echo 'Cleanup XCode Derived Data and Archives...'
 rm -rfv ~/Library/Developer/Xcode/DerivedData/* &>/dev/null
 rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
 
+if type "xcrun" &>/dev/null; then
+  echo 'Cleanup iOS Simulators...'
+  osascript -e 'tell application "com.apple.CoreSimulator.CoreSimulatorService" to quit'
+  osascript -e 'tell application "iOS Simulator" to quit'
+  osascript -e 'tell application "Simulator" to quit'
+  xcrun simctl erase all
+fi
+
 echo 'Cleanup pip cache...'
 rm -rfv ~/Library/Caches/pip
 
