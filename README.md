@@ -8,6 +8,7 @@ A cleanup script for macOS that runs the following tasks:
 * Cleanup iOS Applications
 * Remove iOS Device Backups
 * Cleanup Xcode Derived Data and Archives
+* Reset iOS simulators
 * Cleanup Homebrew Cache
 * Cleanup Any Old Versions of Gems
 * Cleanup Dangling Docker Images
