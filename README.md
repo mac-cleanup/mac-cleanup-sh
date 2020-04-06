@@ -13,6 +13,8 @@ A cleanup script for macOS that runs the following tasks:
 * Cleanup Any Old Versions of Gems
 * Cleanup Dangling Docker Images
 * Purge Inactive Memory
+* Cleanup pip cache
+* Cleanup Pyenv-VirtualEnv Cache
 * Cleanup npm Cache
 * Cleanup Yarn Cache
 * Cleanup Docker Images and Stopped Containers

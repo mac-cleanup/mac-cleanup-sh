@@ -73,9 +73,6 @@ if type "xcrun" &>/dev/null; then
   xcrun simctl erase all
 fi
 
-echo 'Cleanup pip cache...'
-rm -rfv ~/Library/Caches/pip
-
 if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
     echo 'Cleanup CocoaPods cache...'
     rm -rfv ~/Library/Caches/CocoaPods/* &>/dev/null
@@ -121,6 +118,9 @@ if type "docker" &> /dev/null; then
     echo 'Cleanup Docker'
     docker system prune -af
 fi
+
+echo 'Cleanup pip cache...'
+rm -rfv ~/Library/Caches/pip
 
 if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
     echo 'Removing Pyenv-VirtualEnv Cache...'
