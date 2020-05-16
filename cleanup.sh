@@ -55,6 +55,9 @@ rm -rfv ~/Library/Logs/CoreSimulator/* &>/dev/null
 echo 'Clear Adobe Cache Files...'
 sudo rm -rfv ~/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/* &>/dev/null
 
+echo 'Clear Dropbox Cache Files...'
+sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
+
 echo 'Cleanup iOS Applications...'
 rm -rfv ~/Music/iTunes/iTunes\ Media/Mobile\ Applications/* &>/dev/null
 
