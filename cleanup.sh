@@ -152,3 +152,4 @@ newAvailable=$(df / | tail -1 | awk '{print $4}')
 count=$((oldAvailable - newAvailable))
 #count=$(( $count * 512))
 bytesToHuman $count
+
