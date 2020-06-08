@@ -21,6 +21,7 @@ A cleanup script for macOS that runs the following tasks:
 * Cleanup CocoaPods Cache Files
 * Cleanup Google Chrome Cache Files
 * Cleanup composer cache
+* Cleanup Dropbox cache
 
 ## Install Automatically
 

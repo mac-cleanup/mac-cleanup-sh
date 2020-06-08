@@ -90,6 +90,12 @@ if [ -d "/Users/${HOST}/.gradle/caches" ]; then
     rm -rfv ~/.gradle/caches/ &> /dev/null
 fi
 
+# support delete Dropbox Cache
+if [ -d "/Users/${HOST}/Dropbox" ]; then
+echo 'Clear Dropbox 📦 Cache Files...'
+sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
+fi
+
 if type "composer" &> /dev/null; then
     echo 'Cleanup composer...'
     composer clearcache &> /dev/null
