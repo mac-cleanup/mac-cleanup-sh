@@ -16,10 +16,10 @@ deleteCaches() {
     local paths=("$@")
     echo "Initiating cleanup ${cacheName} cache..."
     for folderPath in "${paths[@]}"; do
-        if [ -d $folderPath ]; then
-            dirSize=$(du -hs $1 | awk '{print $1}')
+        if [[ -d ${folderPath} ]]; then
+            dirSize=$(du -hs "${folderPath}" | awk '{print $1}')
             echo "Deleting ${folderPath} to free up ${dirSize}..."
-            rm -rfv $folderPath &>/dev/null
+            rm -rfv "${folderPath}" &>/dev/null
         fi
     done
 }
@@ -93,10 +93,12 @@ if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
 fi
 
 # support delete Google Chrome caches
-if [ -d "/Users/${HOST}/Library/Caches/Google/Chrome" ]; then
-    echo 'Cleanup Google Chrome cache...'
-    rm -rfv ~/Library/Caches/Google/Chrome/* &> /dev/null
-fi
+chromePaths=(
+    "/Users/${HOST}/Library/Caches/Google/Chrome" 
+    "/Users/${HOST}/Library/Application Support/Google/Chrome" 
+    "/Users/${HOST}/Library/Caches/com.google.Chrome"
+)
+deleteCaches "Google Chrome" "${chromePaths[@]}"
 
 # support delete Mozilla Firefox caches
 firefoxPaths=("/Users/${HOST}/Library/Caches/Firefox/" "/Users/${HOST}/Library/Caches/org.mozilla.firefox/")
