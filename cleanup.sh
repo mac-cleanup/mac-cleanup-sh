@@ -64,6 +64,7 @@ rm -rfv ~/Library/Application\ Support/MobileSync/Backup/* &>/dev/null
 echo 'Cleanup XCode Derived Data and Archives...'
 rm -rfv ~/Library/Developer/Xcode/DerivedData/* &>/dev/null
 rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
+rm -rfv ~/Library/Developer/Xcode/iOS Device Logs/* &>/dev/null
 
 if type "xcrun" &>/dev/null; then
   echo 'Cleanup iOS Simulators...'
