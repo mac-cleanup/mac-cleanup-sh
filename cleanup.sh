@@ -16,10 +16,10 @@ deleteCaches() {
     local paths=("$@")
     echo "Initiating cleanup ${cacheName} cache..."
     for folderPath in "${paths[@]}"; do
-        if [ -d $folderPath ]; then
-            dirSize=$(du -hs $folderPath | awk '{print $1}')
+        if [[ -d ${folderPath} ]]; then
+            dirSize=$(du -hs "${folderPath}" | awk '{print $1}')
             echo "Deleting ${folderPath} to free up ${dirSize}..."
-            rm -rfv $folderPath &>/dev/null
+            rm -rfv "${folderPath}" &>/dev/null
         fi
     done
 }
