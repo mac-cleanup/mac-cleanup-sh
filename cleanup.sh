@@ -98,6 +98,10 @@ if [ -d "/Users/${HOST}/Library/Caches/Google/Chrome" ]; then
     rm -rfv ~/Library/Caches/Google/Chrome/* &> /dev/null
 fi
 
+# support delete Mozilla Firefox caches
+firefoxPaths=("/Users/${HOST}/Library/Caches/Firefox/" "/Users/${HOST}/Library/Caches/org.mozilla.firefox/")
+deleteCaches "Mozilla Firefox" "${firefoxPaths[@]}"
+
 # support delete gradle caches
 if [ -d "/Users/${HOST}/.gradle/caches" ]; then
     echo 'Cleanup Gradle cache...'
