@@ -10,6 +10,20 @@ bytesToHuman() {
     echo "$b$d ${S[$s]} of space was cleaned up"
 }
 
+deleteCaches() {
+    local cacheName=$1
+    shift
+    local paths=("$@")
+    echo "Initiating cleanup ${cacheName} cache..."
+    for folderPath in "${paths[@]}"; do
+        if [ -d $folderPath ]; then
+            dirSize=$(du -hs $1 | awk '{print $1}')
+            echo "Deleting ${folderPath} to free up ${dirSize}..."
+            rm -rfv $folderPath &>/dev/null
+        fi
+    done
+}
+
 # Default arguments
 doUpdates=true
 
@@ -83,6 +97,10 @@ if [ -d "/Users/${HOST}/Library/Caches/Google/Chrome" ]; then
     echo 'Cleanup Google Chrome cache...'
     rm -rfv ~/Library/Caches/Google/Chrome/* &> /dev/null
 fi
+
+# support delete Mozilla Firefox caches
+firefoxPaths=("/Users/${HOST}/Library/Caches/Firefox/" "/Users/${HOST}/Library/Caches/org.mozilla.firefox/")
+deleteCaches "Mozilla Firefox" "${firefoxPaths[@]}"
 
 # support delete gradle caches
 if [ -d "/Users/${HOST}/.gradle/caches" ]; then
