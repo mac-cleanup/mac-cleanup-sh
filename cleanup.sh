@@ -93,10 +93,12 @@ if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
 fi
 
 # support delete Google Chrome caches
-if [ -d "/Users/${HOST}/Library/Caches/Google/Chrome" ]; then
-    echo 'Cleanup Google Chrome cache...'
-    rm -rfv ~/Library/Caches/Google/Chrome/* &> /dev/null
-fi
+chromePaths=(
+    "/Users/${HOST}/Library/Caches/Google/Chrome" 
+    "/Users/${HOST}/Library/Application Support/Google/Chrome" 
+    "/Users/${HOST}/Library/Caches/com.google.Chrome"
+)
+deleteCaches "Google Chrome" "${chromePaths[@]}"
 
 # support delete Mozilla Firefox caches
 firefoxPaths=("/Users/${HOST}/Library/Caches/Firefox/" "/Users/${HOST}/Library/Caches/org.mozilla.firefox/")
