@@ -92,18 +92,6 @@ if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
     rm -rfv ~/Library/Caches/CocoaPods/* &>/dev/null
 fi
 
-# support delete Google Chrome caches
-chromePaths=(
-    "/Users/${HOST}/Library/Caches/Google/Chrome" 
-    "/Users/${HOST}/Library/Application Support/Google/Chrome" 
-    "/Users/${HOST}/Library/Caches/com.google.Chrome"
-)
-deleteCaches "Google Chrome" "${chromePaths[@]}"
-
-# support delete Mozilla Firefox caches
-firefoxPaths=("/Users/${HOST}/Library/Caches/Firefox/" "/Users/${HOST}/Library/Caches/org.mozilla.firefox/")
-deleteCaches "Mozilla Firefox" "${firefoxPaths[@]}"
-
 # support delete gradle caches
 if [ -d "/Users/${HOST}/.gradle/caches" ]; then
     echo 'Cleanup Gradle cache...'
@@ -112,8 +100,8 @@ fi
 
 # support delete Dropbox Cache
 if [ -d "/Users/${HOST}/Dropbox" ]; then
-echo 'Clear Dropbox 📦 Cache Files...'
-sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
+    echo 'Clear Dropbox 📦 Cache Files...'
+    sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
 fi
 
 if type "composer" &> /dev/null; then
