@@ -84,6 +84,7 @@ if type "xcrun" &>/dev/null; then
   osascript -e 'tell application "com.apple.CoreSimulator.CoreSimulatorService" to quit'
   osascript -e 'tell application "iOS Simulator" to quit'
   osascript -e 'tell application "Simulator" to quit'
+  xcrun simctl shutdown all
   xcrun simctl erase all
 fi
 
