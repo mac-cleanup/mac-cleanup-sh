@@ -10,6 +10,20 @@ bytesToHuman() {
     echo "$b$d ${S[$s]} of space was cleaned up"
 }
 
+deleteCaches() {
+    local cacheName=$1
+    shift
+    local paths=("$@")
+    echo "Initiating cleanup ${cacheName} cache..."
+    for folderPath in "${paths[@]}"; do
+        if [[ -d ${folderPath} ]]; then
+            dirSize=$(du -hs "${folderPath}" | awk '{print $1}')
+            echo "Deleting ${folderPath} to free up ${dirSize}..."
+            rm -rfv "${folderPath}" &>/dev/null
+        fi
+    done
+}
+
 # Default arguments
 doUpdates=true
 
@@ -71,18 +85,13 @@ if type "xcrun" &>/dev/null; then
   osascript -e 'tell application "com.apple.CoreSimulator.CoreSimulatorService" to quit'
   osascript -e 'tell application "iOS Simulator" to quit'
   osascript -e 'tell application "Simulator" to quit'
+  xcrun simctl shutdown all
   xcrun simctl erase all
 fi
 
 if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
     echo 'Cleanup CocoaPods cache...'
     rm -rfv ~/Library/Caches/CocoaPods/* &>/dev/null
-fi
-
-# support delete Google Chrome caches
-if [ -d "/Users/${HOST}/Library/Caches/Google/Chrome" ]; then
-    echo 'Cleanup Google Chrome cache...'
-    rm -rfv ~/Library/Caches/Google/Chrome/* &> /dev/null
 fi
 
 # support delete gradle caches
@@ -93,8 +102,8 @@ fi
 
 # support delete Dropbox Cache
 if [ -d "/Users/${HOST}/Dropbox" ]; then
-echo 'Clear Dropbox 📦 Cache Files...'
-sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
+    echo 'Clear Dropbox 📦 Cache Files...'
+    sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
 fi
 
 if type "composer" &> /dev/null; then
