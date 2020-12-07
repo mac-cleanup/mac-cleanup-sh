@@ -24,6 +24,13 @@ A cleanup script for macOS that runs the following tasks:
 
 ## Install Automatically
 
+### Using homebrew
+
+```bash
+brew tap fwartner/mac-cleanup
+brew install mac-cleanup
+```
+
 ### Using curl
 
 ```bash
