@@ -109,6 +109,10 @@ if [ -d "/Users/${HOST}/Dropbox" ]; then
     sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
 fi
 
+echo 'Clear Google Drive File Stream Cache Files...'
+killall "Google Drive File Stream"
+rm -rfv ~/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache &>/dev/null
+
 if type "composer" &> /dev/null; then
     echo 'Cleanup composer...'
     composer clearcache &> /dev/null
