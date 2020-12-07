@@ -59,6 +59,11 @@ echo 'Empty the Trash on all mounted volumes and the main HDD...'
 sudo rm -rfv /Volumes/*/.Trashes/* &>/dev/null
 sudo rm -rfv ~/.Trash/* &>/dev/null
 
+echo 'Clear System Cache Files...'
+sudo rm -rfv /Library/Caches/* &>/dev/null
+sudo rm -rfv /System/Library/Caches/* &>/dev/null
+sudo rm -rfv ~/Library/Caches/* &>/dev/null
+
 echo 'Clear System Log Files...'
 sudo rm -rfv /private/var/log/asl/*.asl &>/dev/null
 sudo rm -rfv /Library/Logs/DiagnosticReports/* &>/dev/null
