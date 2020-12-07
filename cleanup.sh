@@ -157,6 +157,10 @@ if type "yarn" &> /dev/null; then
     yarn cache clean --force
 fi
 
+echo 'Cleanup DNS cache...'
+sudo dscacheutil -flushcache
+sudo killall -HUP mDNSResponder
+
 echo 'Purge inactive memory...'
 sudo purge
 
