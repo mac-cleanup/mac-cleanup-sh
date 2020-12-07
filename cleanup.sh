@@ -59,6 +59,11 @@ echo 'Empty the Trash on all mounted volumes and the main HDD...'
 sudo rm -rfv /Volumes/*/.Trashes/* &>/dev/null
 sudo rm -rfv ~/.Trash/* &>/dev/null
 
+echo 'Clear System Cache Files...'
+sudo rm -rfv /Library/Caches/* &>/dev/null
+sudo rm -rfv /System/Library/Caches/* &>/dev/null
+sudo rm -rfv ~/Library/Caches/* &>/dev/null
+
 echo 'Clear System Log Files...'
 sudo rm -rfv /private/var/log/asl/*.asl &>/dev/null
 sudo rm -rfv /Library/Logs/DiagnosticReports/* &>/dev/null
@@ -87,11 +92,6 @@ if type "xcrun" &>/dev/null; then
   osascript -e 'tell application "Simulator" to quit'
   xcrun simctl shutdown all
   xcrun simctl erase all
-fi
-
-if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
-    echo 'Cleanup CocoaPods cache...'
-    rm -rfv ~/Library/Caches/CocoaPods/* &>/dev/null
 fi
 
 # support delete gradle caches
@@ -134,9 +134,6 @@ if type "docker" &> /dev/null; then
     echo 'Cleanup Docker'
     docker system prune -af
 fi
-
-echo 'Cleanup pip cache...'
-rm -rfv ~/Library/Caches/pip
 
 if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
     echo 'Removing Pyenv-VirtualEnv Cache...'
