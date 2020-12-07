@@ -135,9 +135,6 @@ if type "docker" &> /dev/null; then
     docker system prune -af
 fi
 
-echo 'Cleanup pip cache...'
-rm -rfv ~/Library/Caches/pip
-
 if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
     echo 'Removing Pyenv-VirtualEnv Cache...'
     rm -rfv $PYENV_VIRTUALENV_CACHE_PATH &>/dev/null
