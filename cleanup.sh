@@ -94,11 +94,6 @@ if type "xcrun" &>/dev/null; then
   xcrun simctl erase all
 fi
 
-if [ -d "/Users/${HOST}/Library/Caches/CocoaPods" ]; then
-    echo 'Cleanup CocoaPods cache...'
-    rm -rfv ~/Library/Caches/CocoaPods/* &>/dev/null
-fi
-
 # support delete gradle caches
 if [ -d "/Users/${HOST}/.gradle/caches" ]; then
     echo 'Cleanup Gradle cache...'
