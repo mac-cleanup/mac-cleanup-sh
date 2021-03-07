@@ -1,14 +1,75 @@
 #!/usr/bin/env bash
 
-bytesToHuman() {
-    b=${1:-0}; d=''; s=0; S=(Bytes {K,M,G,T,E,P,Y,Z}iB)
-    while ((b > 1024)); do
-        d="$(printf ".%02d" $((b % 1024 * 100 / 1024)))"
-        b=$((b / 1024))
-        (( s++ ))
-    done
-    echo "$b$d ${S[$s]} of space was cleaned up"
+set -E
+trap cleanup SIGINT SIGTERM ERR EXIT
+
+cleanup() {
+  trap - SIGINT SIGTERM ERR EXIT
 }
+
+# Default arguments
+update=false
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+
+usage() {
+  cat <<EOF
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-u]
+
+A Mac Cleaning up Utility by fwartner
+https://github.com/fwartner/mac-Cleaning up
+
+Available options:
+
+-h, --help       Print this help and exit
+-v, --verbose    Print script debug info
+-u, --update     Run brew update
+EOF
+  exit
+}
+
+setup_colors() {
+  if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
+    NOFORMAT='\033[0m' RED='\033[0;31m' GREEN='\033[0;32m' ORANGE='\033[0;33m' BLUE='\033[0;34m' PURPLE='\033[0;35m' CYAN='\033[0;36m' YELLOW='\033[1;33m'
+  else
+    NOFORMAT='' RED='' GREEN='' ORANGE='' BLUE='' PURPLE='' CYAN='' YELLOW=''
+  fi
+}
+
+msg() {
+  echo >&2 -e "${1-}"
+}
+
+die() {
+  local msg=$1
+  local code=${2-1} # default exit status 1
+  msg "$msg"
+  exit "$code"
+}
+
+parse_params() {
+  # default values of variables set from params
+  update=false
+
+  while :; do
+    case "${1-}" in
+    -h | --help) usage ;;
+    -v | --verbose) set -x ;;
+    --no-color) NO_COLOR=1 ;;
+    -u | --update) update=true ;; # update flag
+    -?*) die "Unknown option: $1" ;;
+    *) break ;;
+    esac
+    shift
+  done
+
+  args=("$@")
+
+  return 0
+}
+
+parse_params "$@"
+setup_colors
 
 deleteCaches() {
     local cacheName=$1
@@ -19,77 +80,66 @@ deleteCaches() {
         if [[ -d ${folderPath} ]]; then
             dirSize=$(du -hs "${folderPath}" | awk '{print $1}')
             echo "Deleting ${folderPath} to free up ${dirSize}..."
-            rm -rfv "${folderPath}" &>/dev/null
+            rm -rfv "${folderPath}" 
         fi
     done
 }
 
-# Default arguments
-doUpdates=true
-
-# Take in arguments
-# Can add more arguments in the future
-while getopts ":n" opt; do
-  case ${opt} in
-    n ) doUpdates=false
-      ;;
-    \? )
-        printf 'A Mac Cleanup Utility by fwartner\n'
-        printf 'https://github.com/fwartner/mac-cleanup\n\n'
-        printf 'USAGE:\n cleanup [FLAGS]\n\n'
-        printf 'FLAGS:\n'
-        printf -- '-h,   prints help menu\n'
-        printf -- '-n    no brew updates\n'
-        exit
-      ;;
-  esac
-done
+bytesToHuman() {
+    b=${1:-0}; d=''; s=0; S=(Bytes {K,M,G,T,E,P,Y,Z}iB)
+    while ((b > 1024)); do
+        d="$(printf ".%02d" $((b % 1024 * 100 / 1024)))"
+        b=$((b / 1024))
+        (( s++ ))
+    done
+    msg "$b$d ${S[$s]} of space was cleaned up"
+}
 
 # Ask for the administrator password upfront
 sudo -v
 
-HOST=$( whoami )
+HOST=$(whoami)
 
 # Keep-alive sudo until `clenaup.sh` has finished
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 oldAvailable=$(df / | tail -1 | awk '{print $4}')
 
-echo 'Empty the Trash on all mounted volumes and the main HDD...'
-sudo rm -rfv /Volumes/*/.Trashes/* &>/dev/null
-sudo rm -rfv ~/.Trash/* &>/dev/null
+msg 'Emptying the Trash on all mounted volumes and the main HDD...'
+sudo rm -rfv /Volumes/*/.Trashes/* 
+sudo rm -rfv ~/.Trash/* 
 
-echo 'Clear System Cache Files...'
-sudo rm -rfv /Library/Caches/* &>/dev/null
-sudo rm -rfv /System/Library/Caches/* &>/dev/null
-sudo rm -rfv ~/Library/Caches/* &>/dev/null
+msg 'Clearing System Cache Files...'
+sudo rm -rfv /Library/Caches/* 
+sudo rm -rfv /System/Library/Caches/* 
+sudo rm -rfv ~/Library/Caches/* 
 
-echo 'Clear System Log Files...'
-sudo rm -rfv /private/var/log/asl/*.asl &>/dev/null
-sudo rm -rfv /Library/Logs/DiagnosticReports/* &>/dev/null
-sudo rm -rfv /Library/Logs/Adobe/* &>/dev/null
-rm -rfv ~/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/* &>/dev/null
-rm -rfv ~/Library/Logs/CoreSimulator/* &>/dev/null
+msg 'Clearing System Log Files...'
+sudo rm -rfv /private/var/log/asl/*.asl 
+sudo rm -rfv /Library/Logs/DiagnosticReports/* 
+sudo rm -rfv /Library/Logs/Adobe/* 
+rm -rfv ~/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/* 
+rm -rfv ~/Library/Logs/CoreSimulator/* 
 
-echo 'Clear Adobe Cache Files...'
-sudo rm -rfv ~/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/* &>/dev/null
+msg 'Clearing Adobe Cache Files...'
+sudo rm -rfv ~/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/* 
 
-echo 'Clear Google Chrome Cache Files...'
-sudo rm -rfv ~/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/* &>/dev/null
+msg 'Clearing Google Chrome Cache Files...'
+sudo rm -rfv ~/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/* 
 
-echo 'Cleanup iOS Applications...'
-rm -rfv ~/Music/iTunes/iTunes\ Media/Mobile\ Applications/* &>/dev/null
+msg 'Cleaning up iOS Applications...'
+rm -rfv ~/Music/iTunes/iTunes\ Media/Mobile\ Applications/* 
 
-echo 'Remove iOS Device Backups...'
-rm -rfv ~/Library/Application\ Support/MobileSync/Backup/* &>/dev/null
+msg 'Removng iOS Device Backups...'
+rm -rfv ~/Library/Application\ Support/MobileSync/Backup/* 
 
-echo 'Cleanup XCode Derived Data and Archives...'
-rm -rfv ~/Library/Developer/Xcode/DerivedData/* &>/dev/null
-rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
-rm -rfv ~/Library/Developer/Xcode/iOS Device Logs/* &>/dev/null
+msg 'Cleaning up XCode Derived Data and Archives...'
+rm -rfv ~/Library/Developer/Xcode/DerivedData/* 
+rm -rfv ~/Library/Developer/Xcode/Archives/* 
+rm -rfv ~/Library/Developer/Xcode/iOS Device Logs/* 
 
 if type "xcrun" &>/dev/null; then
-  echo 'Cleanup iOS Simulators...'
+  msg 'Cleaning up iOS Simulators...'
   osascript -e 'tell application "com.apple.CoreSimulator.CoreSimulatorService" to quit'
   osascript -e 'tell application "iOS Simulator" to quit'
   osascript -e 'tell application "Simulator" to quit'
@@ -97,76 +147,77 @@ if type "xcrun" &>/dev/null; then
   xcrun simctl erase all
 fi
 
-# support delete gradle caches
+# support deleting gradle caches
 if [ -d "/Users/${HOST}/.gradle/caches" ]; then
-    echo 'Cleanup Gradle cache...'
-    rm -rfv ~/.gradle/caches/ &> /dev/null
+    msg 'Cleaning up Gradle cache...'
+    rm -rfv ~/.gradle/caches/
 fi
 
-# support delete Dropbox Cache
+# support deleting Dropbox Cache
 if [ -d "/Users/${HOST}/Dropbox" ]; then
-    echo 'Clear Dropbox 📦 Cache Files...'
-    sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
+    msg 'Clearing Dropbox 📦 Cache Files...'
+    sudo rm -rfv ~/Dropbox/.dropbox.cache/* 
 fi
 
-echo 'Clear Google Drive File Stream Cache Files...'
+msg 'Clear Google Drive File Stream Cache Files...'
 killall "Google Drive File Stream"
-rm -rfv ~/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache &>/dev/null
+rm -rfv ~/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache 
 
 if type "composer" &> /dev/null; then
-    echo 'Cleanup composer...'
-    composer clearcache &> /dev/null
+    msg 'Cleaning up composer...'
+    composer clearcache
 fi
 
 if type "brew" &>/dev/null; then
-    if $doUpdates; then
-        echo 'Update Homebrew Recipes...'
+    if [ "$update" = true ]; then
+        msg 'Updating Homebrew Recipes...'
         brew update
-        echo 'Upgrade and remove outdated formulae'
+        msg 'Upgrading and removing outdated formulae...'
         brew upgrade
     fi
-    echo 'Cleanup Homebrew Cache...'
-    brew cleanup -s &>/dev/null
-    #brew cask cleanup &>/dev/null
-    rm -rfv $(brew --cache) &>/dev/null
-    brew tap --repair &>/dev/null
+    msg 'Cleaning up Homebrew Cache...'
+    brew cleanup -s 
+    rm -rfv "$(brew --cache)" 
+    brew tap --repair 
 fi
 
 if type "gem" &> /dev/null; then
-    echo 'Cleanup any old versions of gems'
-    gem cleanup &>/dev/null
+    msg 'Cleaning up any old versions of gems'
+    gem cleanup 
 fi
 
 if type "docker" &> /dev/null; then
-    echo 'Cleanup Docker'
+    msg 'Cleaning up Docker'
     docker system prune -af
 fi
 
 if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
-    echo 'Removing Pyenv-VirtualEnv Cache...'
-    rm -rfv $PYENV_VIRTUALENV_CACHE_PATH &>/dev/null
+    msg 'Removing Pyenv-VirtualEnv Cache...'
+    rm -rfv "$PYENV_VIRTUALENV_CACHE_PATH" 
 fi
 
 if type "npm" &> /dev/null; then
-    echo 'Cleanup npm cache...'
+    msg 'Cleaning up npm cache...'
     npm cache clean --force
 fi
 
 if type "yarn" &> /dev/null; then
-    echo 'Cleanup Yarn Cache...'
+    msg 'Cleaning up Yarn Cache...'
     yarn cache clean --force
 fi
 
-echo 'Cleanup DNS cache...'
+msg 'Cleaning up DNS cache...'
 sudo dscacheutil -flushcache
 sudo killall -HUP mDNSResponder
 
-echo 'Purge inactive memory...'
+msg 'Purging inactive memory...'
 sudo purge
 
-echo 'Success!'
+msg "${GREEN}Success!${NOFORMAT}"
 
 newAvailable=$(df / | tail -1 | awk '{print $4}')
 count=$((oldAvailable - newAvailable))
 #count=$(( $count * 512))
 bytesToHuman $count
+
+cleanup
