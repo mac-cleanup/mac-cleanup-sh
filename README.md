@@ -1,5 +1,7 @@
 # mac-cleanup
 
+[![Build Status](https://www.travis-ci.com/kjnsn/homebrew-mac-cleanup.svg?branch=master)](https://www.travis-ci.com/kjnsn/homebrew-mac-cleanup)
+
 A cleanup script for macOS that runs the following tasks:
 
 * Empty the Trash on All Mounted Volumes and the Main HDD
