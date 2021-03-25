@@ -23,7 +23,6 @@ A cleanup script for macOS that runs the following tasks:
 * Cleanup CocoaPods Cache Files
 * Cleanup composer cache
 * Cleanup Dropbox cache
-* Cleanup Pod (CocoaPods) cache
 * Remove PhpStorm logs
 
 ## Install Automatically
