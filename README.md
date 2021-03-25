@@ -36,20 +36,23 @@ brew install mac-cleanup
 ### Using curl
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/fwartner/homebrew-mac-cleanup/master/installer.sh)"
 ```
 
 ### Using wget
 
 ```bash
-sh -c "$(wget https://raw.githubusercontent.com/fwartner/mac-cleanup/master/installer.sh -O -)"
+sh -c "$(wget https://raw.githubusercontent.com/fwartner/homebrew-mac-cleanup/master/installer.sh -O -)"
 ```
 
 ## Step by Step Install
 
-1. Download: `curl -o cleanup https://raw.githubusercontent.com/fwartner/mac-cleanup/master/cleanup.sh`
+1. Download: `curl -o cleanup https://raw.githubusercontent.com/fwartner/homebrew-mac-cleanup/master/cleanup.sh`
 2. Make it executable: `chmod +x cleanup`
 3. Move to make it globally usable: `sudo mv cleanup /usr/local/bin/cleanup`
+
+### Note:
+If installing with curl you need to call `cleanup` instead of `mac-cleanup`.
 
 ## Update
 
@@ -68,13 +71,13 @@ curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/master/instal
 Help menu:
 
 ```
-$ cleanup -h
+$ mac-cleanup -h
 
 A Mac Cleanup Utility by fwartner
-https://github.com/fwartner/mac-cleanup
+https://github.com/fwartner/homebrew-mac-cleanup
 
 USAGE:
- cleanup [FLAGS]
+ mac-cleanup [FLAGS]
 
 FLAGS:
 -h,   prints help menu
@@ -84,7 +87,7 @@ FLAGS:
 Clean up without homebrew updates:
 
 ```
-$ cleanup -n
+$ mac-cleanup -n
 ```
 
 ## Contributors
@@ -92,7 +95,7 @@ $ cleanup -n
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/fwartner/mac-cleanup/graphs/contributors"><img src="https://opencollective.com/mac-cleanup/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/fwartner/homebrew-mac-cleanup/graphs/contributors"><img src="https://opencollective.com/mac-cleanup/contributors.svg?width=890&button=false" /></a>
 
 ### Financial Contributors
 
