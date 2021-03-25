@@ -211,6 +211,11 @@ if type "yarn" &>/dev/null; then
 	yarn cache clean --force &>/dev/null
 fi
 
+if type "pod" &>/dev/null; then
+	msg 'Cleaning up Pod Cache...'
+	pod cache clean --all &>/dev/null
+fi
+
 msg 'Cleaning up DNS cache...'
 sudo dscacheutil -flushcache &>/dev/null
 sudo killall -HUP mDNSResponder &>/dev/null
