@@ -48,7 +48,7 @@ sh -c "$(wget https://raw.githubusercontent.com/fwartner/homebrew-mac-cleanup/ma
 
 ## Step by Step Install
 
-1. Download: `curl -o cleanup https://raw.githubusercontent.com/fwartner/homebrew-mac-cleanup/master/cleanup.sh`
+1. Download: `curl -o cleanup https://raw.githubusercontent.com/fwartner/homebrew-mac-cleanup/master/mac-cleanup`
 2. Make it executable: `chmod +x cleanup`
 3. Move to make it globally usable: `sudo mv cleanup /usr/local/bin/cleanup`
 
