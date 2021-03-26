@@ -126,6 +126,9 @@ sudo rm -rfv /Library/Logs/Adobe/* &>/dev/null
 rm -rfv ~/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/* &>/dev/null
 rm -rfv ~/Library/Logs/CoreSimulator/* &>/dev/null
 
+msg 'Clearning PhpStorm Log Files...'
+rm -rfc ~/Library/Logs/JetBrains/PhpStorm[0-9]*/ &>/dev/null
+
 msg 'Clearing Adobe Cache Files...'
 sudo rm -rfv ~/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/* &>/dev/null
 
@@ -209,6 +212,11 @@ fi
 if type "yarn" &>/dev/null; then
 	msg 'Cleaning up Yarn Cache...'
 	yarn cache clean --force &>/dev/null
+fi
+
+if type "pod" &>/dev/null; then
+	msg 'Cleaning up Pod Cache...'
+	pod cache clean --all &>/dev/null
 fi
 
 msg 'Cleaning up DNS cache...'
