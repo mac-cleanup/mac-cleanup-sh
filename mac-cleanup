@@ -195,6 +195,9 @@ if type "gem" &>/dev/null; then
 fi
 
 if type "docker" &>/dev/null; then
+	if ! docker ps >/dev/null 2>&1; then
+		open --background -a Docker
+	fi
 	msg 'Cleaning up Docker'
 	docker system prune -af &>/dev/null
 fi
