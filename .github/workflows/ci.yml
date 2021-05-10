@@ -10,15 +10,14 @@ on:
 
 jobs:
   build:
-    runs-on: macos-11.0
+    runs-on: macos-latest
 
     steps:
-      - name: Set up Homebrew
-        id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@master
-      
-      - name: Tap Repository
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Tap repository
         run: brew tap fwartner/mac-cleanup
-        
-      - name: Install mac-cleanup
-        run: brew install fwartner/mac-cleanup
+
+      - name: Install repository
+        run: brew install mac-cleanup
