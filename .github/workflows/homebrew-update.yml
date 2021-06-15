@@ -10,11 +10,11 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Release Homebrew Formula
-          if: github.event.release.prerelease != true
-          uses: garden-io/update-homebrew-action@v1
-          with:
-            packageName: 'garden-cli'
-            templatePath: 'formula/mac-cleanup.rb'
-            tapRepo: 'fwartner/homebrew-mac-cleanup'
-            srcRepo: 'fwartner/homebrew-mac-cleanup'
-            authToken: ${{ secrets.GITHUB_TOKEN }}
+        if: github.event.release.prerelease != true
+        uses: garden-io/update-homebrew-action@v1
+        with:
+          packageName: 'garden-cli'
+          templatePath: 'formula/mac-cleanup.rb'
+          tapRepo: 'fwartner/homebrew-mac-cleanup'
+          srcRepo: 'fwartner/homebrew-mac-cleanup'
+          authToken: ${{ secrets.GITHUB_TOKEN }}
