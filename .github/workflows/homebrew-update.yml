@@ -2,17 +2,19 @@ name: Update Homebrew Formula
 
 on:
   release:
-    types: [published]
+    types:
+      - created
 
 jobs:
-  homebrew-release:
-    runs-on: macos-latest
+  formula:
+    name: Update Homebrew formula
+    runs-on: ubuntu-latest
     steps:
-      - name: Release Homebrew Formula
-          uses: garden-io/update-homebrew-action@v1
-          with:
-            packageName: "mac-cleanup"
-            templatePath: "formula/mac-cleanup.rb"
-            tapRepo: "fwartner/homebrew-mac-cleanup"
-            srcRepo: "fwartner/homebrew-mac-cleanup"
-            authToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update the Homebrew formula with latest release
+        uses: NSHipster/update-homebrew-formula-action@main
+        with:
+          repository: fwartner/homebrew-mac-cleanup
+          tap: fwartner/homebrew-mac-cleanup
+          formula: formula/mac-cleanup.rb
+        env:
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
