@@ -9,7 +9,6 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Release Homebrew Formula
-          if: github.event.release.prerelease != true
           uses: garden-io/update-homebrew-action@v1
           with:
             packageName: 'mac-cleanup'
