@@ -31,8 +31,8 @@ A cleanup script for macOS that runs the following tasks:
 ### Using homebrew
 
 ```bash
-brew tap fwartner/mac-cleanup
-brew install mac-cleanup
+brew tap fwartner/tap
+brew install fwartner/tap/mac-cleaup
 ```
 
 ### Using curl
