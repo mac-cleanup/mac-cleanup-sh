@@ -1,7 +1,7 @@
 # mac-cleanup
 
 [![Build Status](https://www.travis-ci.com/kjnsn/homebrew-mac-cleanup.svg?branch=master)](https://www.travis-ci.com/kjnsn/homebrew-mac-cleanup)
-[![CI](https://github.com/wartner-io/homebrew-mac-cleanup/actions/workflows/ci.yml/badge.svg)](https://github.com/wartner-io/homebrew-mac-cleanup/actions/workflows/ci.yml)
+[![CI](https://github.com/wartner-io/mac-cleanup/actions/workflows/ci.yml/badge.svg)](https://github.com/wartner-io/mac-cleanup/actions/workflows/ci.yml)
 
 A cleanup script for macOS that runs the following tasks:
 
