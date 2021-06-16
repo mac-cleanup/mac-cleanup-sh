@@ -1,7 +1,7 @@
 # mac-cleanup
 
 [![Build Status](https://www.travis-ci.com/kjnsn/homebrew-mac-cleanup.svg?branch=master)](https://www.travis-ci.com/kjnsn/homebrew-mac-cleanup)
-[![CI](https://github.com/wartner-io/mac-cleanup/actions/workflows/ci.yml/badge.svg)](https://github.com/wartner-io/mac-cleanup/actions/workflows/ci.yml)
+[![CI](https://github.com/fwartner/mac-cleanup/actions/workflows/ci.yml/badge.svg)](https://github.com/fwartner/mac-cleanup/actions/workflows/ci.yml)
 
 A cleanup script for macOS that runs the following tasks:
 
@@ -31,25 +31,25 @@ A cleanup script for macOS that runs the following tasks:
 ### Using homebrew
 
 ```bash
-brew tap wartner-io/mac-cleanup
+brew tap fwartner/mac-cleanup
 brew install mac-cleanup
 ```
 
 ### Using curl
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/wartner-io/mac-cleanup/master/installer.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/fwartner/mac-cleanup/main/installer.sh)"
 ```
 
 ### Using wget
 
 ```bash
-sh -c "$(wget https://raw.githubusercontent.com/wartner-io/mac-cleanup/master/installer.sh -O -)"
+sh -c "$(wget https://raw.githubusercontent.com/fwartner/mac-cleanup/main/installer.sh -O -)"
 ```
 
 ## Step by Step Install
 
-1. Download: `curl -o cleanup https://raw.githubusercontent.com/wartner-io/mac-cleanup/master/mac-cleanup`
+1. Download: `curl -o cleanup https://raw.githubusercontent.com/fwartner/mac-cleanup/main/mac-cleanup`
 2. Make it executable: `chmod +x cleanup`
 3. Move to make it globally usable: `sudo mv cleanup /usr/local/bin/cleanup`
 
@@ -59,13 +59,13 @@ If installing with curl you need to call `cleanup` instead of `mac-cleanup`.
 ## Update
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/wartner-io/mac-cleanup/master/installer.sh" | bash -s update
+curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/main/installer.sh" | bash -s update
 ```
 
 ## Uninstall
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/wartner-io/mac-cleanup/master/installer.sh" | bash -s uninstall
+curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/main/installer.sh" | bash -s uninstall
 ```
 
 ## Usage Options
@@ -76,7 +76,7 @@ Help menu:
 $ mac-cleanup -h
 
 A Mac Cleanup Utility by fwartner
-https://github.com/wartner-io/mac-cleanup
+https://github.com/fwartner/mac-cleanup
 
 USAGE:
  mac-cleanup [FLAGS]
@@ -97,7 +97,7 @@ $ mac-cleanup -n
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/wartner-io/mac-cleanup/graphs/contributors"><img src="https://opencollective.com/mac-cleanup/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/fwartner/mac-cleanup/graphs/contributors"><img src="https://opencollective.com/mac-cleanup/contributors.svg?width=890&button=false" /></a>
 
 ### Financial Contributors
 
