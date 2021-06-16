@@ -31,7 +31,7 @@ A cleanup script for macOS that runs the following tasks:
 ### Using homebrew
 
 ```bash
-brew tap fwartner/mac-cleanup
+brew tap wartner-io/mac-cleanup
 brew install mac-cleanup
 ```
 
