@@ -32,7 +32,7 @@ A cleanup script for macOS that runs the following tasks:
 
 ```bash
 brew tap fwartner/tap
-brew install fwartner/tap/mac-cleaup
+brew install fwartner/tap/mac-cleanup
 ```
 
 ### Using curl

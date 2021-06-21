@@ -6,6 +6,8 @@ class MacCleanup < Formula
     sha256 "{{sha256}}"
     license "MIT"
 
+    depends_on :macos
+
     def install
       bin.install "mac-cleanup"
     end
