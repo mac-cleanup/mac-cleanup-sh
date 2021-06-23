@@ -3,6 +3,8 @@ name: Update Homebrew Formula
 on:
   release:
     types: [published]
+    
+  workflow_dispatch:
 
 jobs:
   homebrew-release:
