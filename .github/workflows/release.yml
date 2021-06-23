@@ -5,21 +5,24 @@ on:
     tags:
       - "*"
 
-  workflow_dispatch:
-
 jobs:
-  homebrew-releaser:
+  homebrew:
+    name: Bump Homebrew formula
     runs-on: ubuntu-latest
-    name: homebrew-releaser
     steps:
-      - name: Release my project to my Homebrew tap
-        uses: Justintime50/homebrew-releaser@v1
+      - name: Extract version
+        id: extract-version
+        run: |
+          printf "::set-output name=%s::%s\n" tag-name "${GITHUB_REF#refs/tags/}"
+      - uses: mislav/bump-homebrew-formula-action@v1
+        if: "!contains(github.ref, '-')"
         with:
-          homebrew_owner: fwartner
-          homebrew_tap: homebrew-tap
-          formula_folder: Formula
-          github_token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
-          commit_owner: "Florian Wartner"
-          commit_email: florian@wartner.io
-          install: 'bin.install "mac-cleanup"'
-          test: 'assert_match "A Mac Cleanup Utility by fwartner", shell_output("#{bin}/mac-cleanup -h", 2)'
+          formula-name: mac-cleanup
+          formula-path: Formula/mac-cleanup.rb
+          homebrew-tap: fwartner/homebrew-tap
+          base-branch: main
+          commit-message: |
+            {{formulaName}} {{version}}
+        env:
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
