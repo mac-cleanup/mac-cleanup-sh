@@ -1,0 +1,20 @@
+{
+  "plugins": [
+    [
+      "brew",
+      {
+        "executable": "mac-cleanup",
+        "name": "mac-cleanup",
+        "formula": "fwartner/mac-cleanup/mac-cleanup"
+      }
+    ],
+    "all-contributors",
+    "conventional-commits",
+    "first-time-contributor"
+  ],
+  "owner": "fwartner",
+  "repo": "mac-cleanup",
+  "name": "Florian Wartner",
+  "email": "florian@wartner.io",
+  "onlyPublishWithReleaseLabel": true
+}
