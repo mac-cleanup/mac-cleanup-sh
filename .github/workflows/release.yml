@@ -3,6 +3,8 @@ on:
     tags:
       - "*"
 
+  workflow_dispatch:
+
 jobs:
   homebrew-releaser:
     runs-on: ubuntu-latest
