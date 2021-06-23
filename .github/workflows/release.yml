@@ -23,4 +23,4 @@ jobs:
           commit_email: florian@wartner.io
           install: 'bin.install "mac-cleanup"'
           test: 'assert_match "A Mac Cleanup Utility by fwartner", shell_output("#{bin}/mac-cleanup -h", 2)'
-          update_readme_table: true
+          update_readme_table: false
