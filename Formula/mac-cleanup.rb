@@ -3,8 +3,8 @@ class MacCleanup < Formula
     homepage "https://opensource.wartner.io"
     license "MIT"
     head "https://github.com/fwartner/homebrew-mac-cleanup.git"
-    version "$VERSION"
-    sha256 "$SHA"
+    version "1.0.4"
+    sha256 "45b0cd54d7e7a5feacd27daca3ad1d360138f7bab63b7544e817a965ef31021e"
 
     def install
         bin.install "mac-cleanup"
