@@ -17,7 +17,7 @@ jobs:
         with:
           homebrew_owner: fwartner
           homebrew_tap: homebrew-tap
-          formula_folder: formula
+          formula_folder: Formula
           github_token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
           commit_owner: "Florian Wartner"
           commit_email: florian@wartner.io
