@@ -16,7 +16,7 @@
   "repo": "mac-cleanup",
   "name": "Florian Wartner",
   "email": "florian@wartner.io",
-  "onlyPublishWithReleaseLabel": true,
+  "onlyPublishWithReleaseLabel": false,
   "release": {
     "prerelease": true
   }
