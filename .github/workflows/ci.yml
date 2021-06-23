@@ -21,3 +21,13 @@ jobs:
 
       - name: Install repository
         run: brew install mac-cleanup
+
+      - name: Create Hashes
+        uses: MCJack123/ghaction-generate-release-hashes@v1
+        with:
+          hash-type: sha1
+          file-name: hashes.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Asset Hashes
+          path: hashes.txt
