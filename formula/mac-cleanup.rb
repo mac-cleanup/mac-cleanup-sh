@@ -1,6 +1,6 @@
 class MacCleanup < Formula
     desc "🗑️ Cleanup script for OSX"
-    homepage "https://wartner.io"
+    homepage "https://opensource.wartner.io"
     url "{{{tarballUrl}}}"
     version "{{version}}"
     sha256 "{{sha256}}"
