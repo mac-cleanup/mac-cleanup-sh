@@ -5,7 +5,7 @@
       {
         "executable": "mac-cleanup",
         "name": "mac-cleanup",
-        "formula": "Formula/mac-cleanup"
+        "formula": "Formula/mac-cleanup.rb"
       }
     ],
     "all-contributors",
