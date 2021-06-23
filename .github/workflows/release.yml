@@ -1,20 +1,23 @@
-name: Update Homebrew Formula
-
 on:
-  release:
-    types: [published]
-    
-  workflow_dispatch:
+  push:
+    tags:
+      - "*"
 
 jobs:
-  homebrew-release:
-    runs-on: macos-latest
+  homebrew-releaser:
+    runs-on: ubuntu-latest
+    name: homebrew-releaser
     steps:
-      - name: Release Homebrew Formula
-        uses: garden-io/update-homebrew-action@v1
+      - name: Release my project to my Homebrew tap
+        uses: Justintime50/homebrew-releaser@v1
         with:
-          packageName: 'mac-cleanup'
-          templatePath: 'formula/mac-cleanup.rb'
-          tapRepo: 'fwartner/mac-cleanup'
-          srcRepo: 'fwartner/mac-cleanup'
-          authToken: ${{ secrets.GITHUB_TOKEN }}
+          homebrew_owner: fwartner
+          homebrew_tap: homebrew-tap
+          formula_folder: formula
+          github_token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          commit_owner: "Florian Wartner"
+          commit_email: florian@wartner.io
+          install: 'bin.install "src/my-script.sh" => "my-script"'
+          test: 'assert_match("my script output", shell_output("my-script-command"))'
+          skip_commit: false
+          update_readme_table: true
