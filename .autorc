@@ -5,7 +5,7 @@
       {
         "executable": "mac-cleanup",
         "name": "mac-cleanup",
-        "formula": "fwartner/mac-cleanup/mac-cleanup"
+        "formula": "Formula/mac-cleanup"
       }
     ],
     "all-contributors",
