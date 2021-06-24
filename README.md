@@ -1,7 +1,4 @@
 # mac-cleanup
-
-[![CI](https://github.com/fwartner/mac-cleanup/actions/workflows/ci.yml/badge.svg)](https://github.com/fwartner/mac-cleanup/actions/workflows/ci.yml)
-
 A cleanup script for macOS that runs the following tasks:
 
 * Empty the Trash on All Mounted Volumes and the Main HDD
