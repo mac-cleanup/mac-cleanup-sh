@@ -17,7 +17,7 @@ Nothing. This issue is meant to welcome you to Open Source :) We are happy to wa
 - [ ] 👓 **Please review** our [Code of Conduct](https://github.com/fwartner/mac-cleanup/blob/main/CODE_OF_CONDUCT.md)
   In a nutshell: be patient and actively kind with us 😊
 - [ ] 🔄 **replace** the `available` label with `in progress`.
-- [ ] 📝 **Update** the file [$FILENAME in the `hoodiehq/$REPO` repository]($BRANCH_URL) (press the little pen Icon) and edit the line as shown below.
+- [ ] 📝 **Update** the file [$FILENAME in the `fwartner/$REPO` repository]($BRANCH_URL) (press the little pen Icon) and edit the line as shown below.
 
 ```diff
 $DIFF
