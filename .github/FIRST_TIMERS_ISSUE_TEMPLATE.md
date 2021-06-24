@@ -14,7 +14,7 @@ Nothing. This issue is meant to welcome you to Open Source :) We are happy to wa
   Please 🙏 only claim if you want to start working on it within a day. We will select a person at random as the contributor the day after the issue is created.
   Once claimed we add you as contributor to this repository.
 - [ ] 👌 **Accept our invitation** to this repository. Once accepted, assign yourself to this repository
-- [ ] 👓 **Please review** our [Code of Conduct](https://github.com/fwartner/mac-cleanup/blob/main/CODE_OF_CONDUCT.md)
+- [ ] 👓 **Please review** our [Code of Conduct](https://github.com/fwartner/$REPO/blob/main/CODE_OF_CONDUCT.md)
   In a nutshell: be patient and actively kind with us 😊
 - [ ] 🔄 **replace** the `available` label with `in progress`.
 - [ ] 📝 **Update** the file [$FILENAME in the `fwartner/$REPO` repository]($BRANCH_URL) (press the little pen Icon) and edit the line as shown below.
