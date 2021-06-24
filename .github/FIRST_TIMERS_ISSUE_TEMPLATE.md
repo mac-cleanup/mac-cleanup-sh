@@ -23,7 +23,7 @@ Nothing. This issue is meant to welcome you to Open Source :) We are happy to wa
 $DIFF
 ```
 
-- [ ] 🔀 **Start a Pull Request**. Mention `closes hoodiehq/camp#THIS_ISSUE_NUMBER` in the description. There are two ways how you can start a pull request:
+- [ ] 🔀 **Start a Pull Request**. Mention `closes fwartner/$REPO#THIS_ISSUE_NUMBER` in the description. There are two ways how you can start a pull request:
   1. If you are familiar with the terminal or would like to learn it, [here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github) on how to send a pull request using the terminal.
   2. You can [edit files directly in your browser](https://help.github.com/articles/editing-files-in-your-repository/)
 - [ ] 🏁 **Done** :+1: Replace the `in progress` label with `ready for review`. Ask in comments for a review :)
