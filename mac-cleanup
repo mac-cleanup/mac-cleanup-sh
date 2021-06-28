@@ -86,7 +86,7 @@ deleteCaches() {
 bytesToHuman() {
 	b=${1:-0}
 	d=''
-	s=0
+	s=1
 	S=(Bytes {K,M,G,T,E,P,Y,Z}iB)
 	while ((b > 1024)); do
 		d="$(printf ".%02d" $((b % 1024 * 100 / 1024)))"
