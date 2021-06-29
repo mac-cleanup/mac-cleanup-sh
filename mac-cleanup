@@ -126,7 +126,7 @@ sudo rm -rfv /Library/Logs/Adobe/* &>/dev/null
 rm -rfv ~/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/* &>/dev/null
 rm -rfv ~/Library/Logs/CoreSimulator/* &>/dev/null
 
-msg 'Clearning PhpStorm Log Files...'
+msg 'Clearing PhpStorm Log Files...'
 rm -rfc ~/Library/Logs/JetBrains/PhpStorm[0-9]*/ &>/dev/null
 
 msg 'Clearing Adobe Cache Files...'
@@ -138,7 +138,7 @@ sudo rm -rfv ~/Library/Application\ Support/Google/Chrome/Default/Application\ C
 msg 'Cleaning up iOS Applications...'
 rm -rfv ~/Music/iTunes/iTunes\ Media/Mobile\ Applications/* &>/dev/null
 
-msg 'Removng iOS Device Backups...'
+msg 'Removing iOS Device Backups...'
 rm -rfv ~/Library/Application\ Support/MobileSync/Backup/* &>/dev/null
 
 msg 'Cleaning up XCode Derived Data and Archives...'
