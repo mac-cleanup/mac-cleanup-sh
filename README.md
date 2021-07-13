@@ -106,4 +106,4 @@ This project exists thanks to all the people who contribute. [[Contribute](CONTR
 <a href="https://opencollective.com/mac-cleanup/organization/8/website"><img src="https://opencollective.com/mac-cleanup/organization/8/avatar.svg"></a>
 <a href="https://opencollective.com/mac-cleanup/organization/9/website"><img src="https://opencollective.com/mac-cleanup/organization/9/avatar.svg"></a>
 
- If you like what I am doing please consider [sponsor my work](https://github.com/sponsors/fwartner)!
+If you like what I am doing please consider [sponsor my work](https://github.com/sponsors/fwartner)!
