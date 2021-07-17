@@ -88,6 +88,11 @@ Clean up without homebrew updates:
 $ mac-cleanup -n
 ```
 
+## See Also
+
+[topgrade](https://github.com/r-darwish/topgrade) keeps various package environments up to
+date on MacOS with one command
+
 ## Contributors
 
 ### Code Contributors
