@@ -101,7 +101,7 @@ sudo -v
 
 HOST=$(whoami)
 
-# Keep-alive sudo until `clenaup.sh` has finished
+# Keep-alive sudo until `mac-cleanup.sh` has finished
 while true; do
 	sudo -n true
 	sleep 60
@@ -110,7 +110,7 @@ done 2>/dev/null &
 
 oldAvailable=$(df / | tail -1 | awk '{print $4}')
 
-msg 'Emptying the Trash on all mounted volumes and the main HDD...'
+msg 'Emptying the Trash 🗑 on all mounted volumes and the main HDD...'
 sudo rm -rfv /Volumes/*/.Trashes/* &>/dev/null
 sudo rm -rfv ~/.Trash/* &>/dev/null
 
@@ -126,14 +126,20 @@ sudo rm -rfv /Library/Logs/Adobe/* &>/dev/null
 rm -rfv ~/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/* &>/dev/null
 rm -rfv ~/Library/Logs/CoreSimulator/* &>/dev/null
 
-msg 'Clearing PhpStorm Log Files...'
-rm -rfc ~/Library/Logs/JetBrains/PhpStorm[0-9]*/ &>/dev/null
+if [ -d ~/Library/Logs/JetBrains/ ]; then
+  msg 'Clearing all application log files from JetBrains...'
+  rm -rfc ~/Library/Logs/JetBrains/*/ &>/dev/null
+fi
 
-msg 'Clearing Adobe Cache Files...'
-sudo rm -rfv ~/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/* &>/dev/null
+if [ -d ~/Library/Application\ Support/Adobe/ ]; then
+  msg 'Clearing Adobe Cache Files...'
+  sudo rm -rfv ~/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/* &>/dev/null
+fi
 
-msg 'Clearing Google Chrome Cache Files...'
-sudo rm -rfv ~/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/* &>/dev/null
+if [ -d ~/Library/Application\ Support/Google/Chrome/ ]; then
+  msg 'Clearing Google Chrome Cache Files...'
+  sudo rm -rfv ~/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/* &>/dev/null
+fi
 
 msg 'Cleaning up iOS Applications...'
 rm -rfv ~/Music/iTunes/iTunes\ Media/Mobile\ Applications/* &>/dev/null
@@ -161,15 +167,17 @@ if [ -d "/Users/${HOST}/.gradle/caches" ]; then
 	rm -rfv ~/.gradle/caches/ &>/dev/null
 fi
 
-# support deleting Dropbox Cache
+# support deleting Dropbox Cache if they exist
 if [ -d "/Users/${HOST}/Dropbox" ]; then
 	msg 'Clearing Dropbox 📦 Cache Files...'
 	sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
 fi
 
-msg 'Clearing Google Drive File Stream Cache Files...'
-killall "Google Drive File Stream"
-rm -rfv ~/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache &>/dev/null
+if [ -d ~/Library/Application\ Support/Google/DriveFS/ ]; then
+  msg 'Clearing Google Drive File Stream Cache Files...'
+  killall "Google Drive File Stream"
+  rm -rfv ~/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache &>/dev/null
+fi
 
 if type "composer" &>/dev/null; then
 	msg 'Cleaning up composer...'
