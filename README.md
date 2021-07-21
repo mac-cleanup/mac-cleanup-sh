@@ -21,6 +21,8 @@ A cleanup script for macOS that runs the following tasks:
 * Cleanup composer cache
 * Cleanup Dropbox cache
 * Remove PhpStorm logs
+* Remove Minecraft logs and cache
+* Remove Steam logs and cache
 
 ## Install Automatically
 
