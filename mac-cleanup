@@ -184,6 +184,29 @@ if type "composer" &>/dev/null; then
 	composer clearcache &>/dev/null
 fi
 
+# Deletes Steam caches, logs, and temp files
+# -Astro
+if [ -d "~/Library/Application Support/Steam/"]; then
+	msg 'Clearing Steam Cache, Log, and Temp Files...'
+	rm -rfv ~/Library/Application\ Support/Steam/appcache &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Steam/depotcache &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Steam/logs &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Steam/steamapps/shadercache &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Steam/steamapps/temp &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Steam/steamapps/download &>/dev/null
+fi
+
+# Deletes Minecraft logs
+# -Astro
+if [-d "~/Library/Application\ Support/minecraft"]; then
+	msg 'Clearing Minecraft Cache and Log Files...'
+	rm -rfv ~/Library/Application\ Support/minecraft/logs &>/dev/null
+	rm -rfv ~/Library/Application\ Support/minecraft/crash-reports &>/dev/null
+	rm -rfv ~/Library/Application\ Support/minecraft/webcache &>/dev/null
+	rm -rfv ~/Library/Application\ Support/minecraft/webcache2 &>/dev/null
+	rm -rfv ~/Library/Application\ Support/minecraft/crash-reports &>/dev/null
+	rm -rfv ~/Library/Application\ Support/minecraft/*.log &>/dev/null
+
 if type "brew" &>/dev/null; then
 	if [ "$update" = true ]; then
 		msg 'Updating Homebrew Recipes...'
