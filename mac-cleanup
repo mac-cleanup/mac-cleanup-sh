@@ -213,6 +213,24 @@ if [ -d ~/Library/Application\ Support/minecraft ]; then
 	fi
 fi
 
+# Deletes Lunar Client logs (Minecraft alternate client)
+# -Astro
+if [ -d ~/.lunarclient ]; then
+	msg 'Deleting Lunar Client logs and caches...'
+	rm -rfv ~/.lunarclient/game-cache &>/dev/null
+	rm -rfv ~/.lunarclient/launcher-cache &>/dev/null
+	rm -rfv ~/.lunarclient/logs &>/dev/null
+	rm -rfv ~/.lunarclient/offline/*/logs &>/dev/null
+	rm -rfv ~/.lunarclient/offline/files/*/logs &>/dev/null
+fi
+
+# Deletes Wget logs
+# -Astro
+if [ -d ~/wget-log ]; then
+	msg 'Deleting Wget log...'
+	rm -fv ~/wget-log &>/dev/null
+fi
+
 if type "brew" &>/dev/null; then
 	if [ "$update" = true ]; then
 		msg 'Updating Homebrew Recipes...'
