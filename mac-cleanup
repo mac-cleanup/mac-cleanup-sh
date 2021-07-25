@@ -206,7 +206,37 @@ if [ -d ~/Library/Application\ Support/minecraft ]; then
 	rm -rfv ~/Library/Application\ Support/minecraft/webcache2 &>/dev/null
 	rm -rfv ~/Library/Application\ Support/minecraft/crash-reports &>/dev/null
 	rm -rfv ~/Library/Application\ Support/minecraft/*.log &>/dev/null
+	rm -rfv ~/Library/Application\ Support/minecraft/launcher_cef_log.txt &>/dev/null
+
+	if [ -d ~/Library/Application\ Support/minecraft/.mixin.out ]; then
+		rm -rfv ~/Library/Application\ Support/minecraft/.mixin.out &>/dev/null
+	fi
 fi
+
+# Deletes Lunar Client logs (Minecraft alternate client)
+# -Astro
+if [ -d ~/.lunarclient ]; then
+	msg 'Deleting Lunar Client logs and caches...'
+	rm -rfv ~/.lunarclient/game-cache &>/dev/null
+	rm -rfv ~/.lunarclient/launcher-cache &>/dev/null
+	rm -rfv ~/.lunarclient/logs &>/dev/null
+	rm -rfv ~/.lunarclient/offline/*/logs &>/dev/null
+	rm -rfv ~/.lunarclient/offline/files/*/logs &>/dev/null
+fi
+
+# Deletes Wget logs
+# -Astro
+if [ -d ~/wget-log ]; then
+	msg 'Deleting Wget log and hosts file...'
+	rm -fv ~/wget-log &>/dev/null
+	rm -fv ~/.wget-hsts &>/dev/null
+fi
+
+# Deletes Bash/ZSH logs
+# -Astro
+msg 'Clearing Bash/ZSH history...'
+rm -fv ~/.bash_history &>/dev/null
+rm -fv ~/.zhistory &>/dev/null
 
 if type "brew" &>/dev/null; then
 	if [ "$update" = true ]; then

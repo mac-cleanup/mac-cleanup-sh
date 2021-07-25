@@ -23,6 +23,9 @@ A cleanup script for macOS that runs the following tasks:
 * Remove PhpStorm logs
 * Remove Minecraft logs and cache
 * Remove Steam logs and cache
+* Remove Lunar Client logs and cache
+* Remove Wget logs and hosts
+* Clear Bash/ZSH history
 
 ## Install Automatically
 
