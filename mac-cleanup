@@ -227,9 +227,16 @@ fi
 # Deletes Wget logs
 # -Astro
 if [ -d ~/wget-log ]; then
-	msg 'Deleting Wget log...'
+	msg 'Deleting Wget log and hosts file...'
 	rm -fv ~/wget-log &>/dev/null
+	rm -fv ~/.wget-hsts &>/dev/null
 fi
+
+# Deletes Bash/ZSH logs
+# -Astro
+msg 'Clearing Bash/ZSH history...'
+rm -fv ~/.bash_history &>/dev/null
+rm -fv ~/.zhistory &>/dev/null
 
 if type "brew" &>/dev/null; then
 	if [ "$update" = true ]; then
