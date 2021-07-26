@@ -238,6 +238,14 @@ msg 'Clearing Bash/ZSH history...'
 rm -fv ~/.bash_history &>/dev/null
 rm -fv ~/.zhistory &>/dev/null
 
+# Deletes Cacher logs
+# idk either
+# -Astro
+if [ -d ~/cacher ]; then
+	msg 'Deleting Cacher logs...'
+	rm -rfv ~/.cacher/logs
+fi
+
 if type "brew" &>/dev/null; then
 	if [ "$update" = true ]; then
 		msg 'Updating Homebrew Recipes...'
