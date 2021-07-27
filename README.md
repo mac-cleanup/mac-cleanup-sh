@@ -28,6 +28,7 @@ A cleanup script for macOS that runs the following tasks:
 * Clear Bash/ZSH history
 * Removes Cacher logs
 * Deletes Android caches
+* Clears Gradle caches
 
 
 ## Install Automatically

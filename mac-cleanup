@@ -253,6 +253,13 @@ if [ -d ~/.android ]; then
 	rm -rfv ~/.android/cache
 fi
 
+# Clears Gradle caches
+# -Astro
+if [ -d ~/.gradle ]; then
+	msg 'Clearing Gradle caches...'
+	rm -rfv ~/.gradle/caches
+fi
+
 # Deletes other caches if they exist
 # -Astro
 if [ -d ~/.cache ]; then
