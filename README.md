@@ -29,6 +29,7 @@ A cleanup script for macOS that runs the following tasks:
 * Removes Cacher logs
 * Deletes Android caches
 * Clears Gradle caches
+* Deletes Kite logs
 
 
 ## Install Automatically

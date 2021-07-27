@@ -260,6 +260,13 @@ if [ -d ~/.gradle ]; then
 	rm -rfv ~/.gradle/caches
 fi
 
+# Deletes Kite Autocomplete logs
+# -Astro
+if [ -d ~/.kite ]; then
+	msg 'Deleting Kite logs...'
+	rm -rfv ~/.kite/logs
+fi
+
 # Deletes other caches if they exist
 # -Astro
 if [ -d ~/.cache ]; then
