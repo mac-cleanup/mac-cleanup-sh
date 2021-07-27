@@ -27,6 +27,7 @@ A cleanup script for macOS that runs the following tasks:
 * Remove Wget logs and hosts
 * Clear Bash/ZSH history
 * Removes Cacher logs
+* Deletes Android caches
 
 
 ## Install Automatically

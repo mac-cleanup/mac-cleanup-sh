@@ -239,11 +239,25 @@ rm -fv ~/.bash_history &>/dev/null
 rm -fv ~/.zhistory &>/dev/null
 
 # Deletes Cacher logs
-# idk either
+# I dunno either
 # -Astro
-if [ -d ~/cacher ]; then
+if [ -d ~/.cacher ]; then
 	msg 'Deleting Cacher logs...'
 	rm -rfv ~/.cacher/logs
+fi
+
+# Deletes Android (studio?) cache
+# -Astro
+if [ -d ~/.android ]; then
+	msg 'Deleting Android cache...'
+	rm -rfv ~/.android/cache
+fi
+
+# Deletes other caches if they exist
+# -Astro
+if [ -d ~/.cache ]; then
+	msg 'Deleting other caches...'
+	rm -rfv ~/.cache/*
 fi
 
 if type "brew" &>/dev/null; then
