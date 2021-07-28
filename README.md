@@ -31,7 +31,6 @@ A cleanup script for macOS that runs the following tasks:
 * Clears Gradle caches
 * Deletes Kite logs
 
-
 ## Install Automatically
 
 ### Using homebrew
@@ -90,12 +89,6 @@ USAGE:
 FLAGS:
 -h,   prints help menu
 -n    no brew updates
-```
-
-Clean up without homebrew updates:
-
-```
-$ mac-cleanup -n
 ```
 
 ## Contributors
