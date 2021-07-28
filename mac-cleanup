@@ -118,7 +118,7 @@ msg 'Clearing System Cache Files...'
 sudo rm -rfv /Library/Caches/* &>/dev/null
 sudo rm -rfv /System/Library/Caches/* &>/dev/null
 sudo rm -rfv ~/Library/Caches/* &>/dev/null
-sudo rm -rfv /private/var/folders/bh/5qn6f27x049drtr8rqq75jt80000gp/C/*/* &>/dev/null
+sudo rm -rfv /private/var/folders/bh/*/*/*/* &>/dev/null
 
 msg 'Clearing System Log Files...'
 sudo rm -rfv /private/var/log/asl/*.asl &>/dev/null
