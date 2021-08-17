@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  homebrew:
+    name: Bump Homebrew formula
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract version
+        id: extract-version
+        run: |
+          printf "::set-output name=%s::%s\n" tag-name "${GITHUB_REF#refs/tags/}"
+      - uses: mislav/bump-homebrew-formula-action@v1
+        if: "!contains(github.ref, '-')"
+        with:
+          formula-name: mac-cleanup
+          formula-path: Formula/mac-cleanup.rb
+          homebrew-tap: fwartner/homebrew-tap
+          base-branch: main
+          commit-message: |
+            {{formulaName}} {{version}}
+        env:
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          
+          
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ethomson/send-tweet-action@v1
+        with:
+          status: "A new release for mac-cleanup has been created ❤️  https://github.com/fwartner/mac-cleanup"
+          consumer-key: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
+          consumer-secret: ${{ secrets.TWITTER_CONSUMER_API_SECRET }}
+          access-token: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          access-token-secret: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
