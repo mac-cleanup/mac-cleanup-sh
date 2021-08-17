@@ -316,6 +316,24 @@ if type "pod" &>/dev/null; then
 	pod cache clean --all &>/dev/null
 fi
 
+# Deletes all Microsoft Teams Caches and resets it to default - can fix also some performance issues
+# -Astro
+if [ -d ~/Library/Application\ Support/Microsoft/Teams ]; then
+	# msg 'Deleting Microsoft Teams logs and caches...'
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/IndexedDB &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/Cache &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/Application\ Cache &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/Code\ Cache &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/blob_storage &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/databases &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/gpucache &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/Local\ Storage &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/tmp &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/*logs*.txt &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/watchdog &>/dev/null
+	rm -rfv ~/Library/Application\ Support/Microsoft/Teams/*watchdog*.json &>/dev/null
+fi
+
 msg 'Cleaning up DNS cache...'
 sudo dscacheutil -flushcache &>/dev/null
 sudo killall -HUP mDNSResponder &>/dev/null
