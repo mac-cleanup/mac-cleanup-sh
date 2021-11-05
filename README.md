@@ -44,18 +44,18 @@ brew install fwartner/tap/mac-cleanup
 ### Using curl
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/fwartner/mac-cleanup/main/installer.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh)"
 ```
 
 ### Using wget
 
 ```bash
-sh -c "$(wget https://raw.githubusercontent.com/fwartner/mac-cleanup/main/installer.sh -O -)"
+sh -c "$(wget https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh -O -)"
 ```
 
 ## Step by Step Install
 
-1. Download: `curl -o cleanup https://raw.githubusercontent.com/fwartner/mac-cleanup/main/mac-cleanup`
+1. Download: `curl -o cleanup https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/mac-cleanup`
 2. Make it executable: `chmod +x cleanup`
 3. Move to make it globally usable: `sudo mv cleanup /usr/local/bin/cleanup`
 
@@ -65,13 +65,13 @@ If installing with curl you need to call `cleanup` instead of `mac-cleanup`.
 ## Update
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/main/installer.sh" | bash -s update
+curl -fsSL "https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh" | bash -s update
 ```
 
 ## Uninstall
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/fwartner/mac-cleanup/main/installer.sh" | bash -s uninstall
+curl -fsSL "https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh" | bash -s uninstall
 ```
 
 ## Usage Options
@@ -82,7 +82,7 @@ Help menu:
 $ mac-cleanup -h
 
 A Mac Cleanup Utility by fwartner
-https://github.com/fwartner/mac-cleanup
+https://github.com/mac-cleanup/mac-cleanup-sh
 
 USAGE:
  mac-cleanup [FLAGS]
@@ -97,7 +97,7 @@ FLAGS:
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/fwartner/mac-cleanup/graphs/contributors"><img src="https://opencollective.com/mac-cleanup/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/mac-cleanup/mac-cleanup-sh/graphs/contributors"><img src="https://opencollective.com/mac-cleanup/contributors.svg?width=890&button=false" /></a>
 
 <a href="https://opencollective.com/mac-cleanup/organization/0/website"><img src="https://opencollective.com/mac-cleanup/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/mac-cleanup/organization/1/website"><img src="https://opencollective.com/mac-cleanup/organization/1/avatar.svg"></a>
