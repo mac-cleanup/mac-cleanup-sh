@@ -44,13 +44,13 @@ brew install fwartner/tap/mac-cleanup
 ### Using curl
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh)"
 ```
 
 ### Using wget
 
 ```bash
-sh -c "$(wget https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh -O -)"
+bash -c "$(wget https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh -O -)"
 ```
 
 ## Step by Step Install
