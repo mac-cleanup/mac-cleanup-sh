@@ -31,6 +31,7 @@ A cleanup script for macOS that runs the following tasks:
 * Deletes Android caches
 * Clears Gradle caches
 * Deletes Kite logs
+* Clears Go module cache
 
 ## Install Automatically
 

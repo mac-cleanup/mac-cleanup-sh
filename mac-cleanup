@@ -316,6 +316,11 @@ if type "pod" &>/dev/null; then
 	pod cache clean --all &>/dev/null
 fi
 
+if type "go" &>/dev/null; then
+	msg 'Clearing Go module cache...'
+	go clean -modcache &>/dev/null
+fi
+
 # Deletes all Microsoft Teams Caches and resets it to default - can fix also some performance issues
 # -Astro
 if [ -d ~/Library/Application\ Support/Microsoft/Teams ]; then
