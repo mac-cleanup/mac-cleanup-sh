@@ -15,7 +15,7 @@ usage() {
 Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-u]
 
 A Mac Cleaning up Utility by fwartner
-https://github.com/fwartner/mac-cleanup
+https://github.com/mac-cleanup/mac-cleanup-sh
 
 Available options:
 
