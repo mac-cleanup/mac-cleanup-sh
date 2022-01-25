@@ -47,7 +47,7 @@ die() {
 
 install() {
     msg "${BLUE}Download Mac Cleanup${NOFORMAT}"
-    curl -o mac-cleanup https://raw.githubusercontent.com/fwartner/mac-cleanup/main/mac-cleanup
+    curl -o mac-cleanup https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/mac-cleanup
     msg "${BLUE}Init Mac Cleanup${NOFORMAT}"
     chmod +x mac-cleanup
     msg "${BLUE}Install Mac Cleanup${NOFORMAT}"
