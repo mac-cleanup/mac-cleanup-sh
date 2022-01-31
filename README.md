@@ -26,7 +26,6 @@ A cleanup script for macOS that runs the following tasks:
 * Remove Lunar Client logs and cache
 * Remove Microsoft Teams logs and cache
 * Remove Wget logs and hosts
-* Clear Bash/ZSH history
 * Removes Cacher logs
 * Deletes Android caches
 * Clears Gradle caches
