@@ -235,12 +235,6 @@ if [ -d ~/wget-log ]; then
 	rm -fv ~/.wget-hsts &>/dev/null
 fi
 
-# Deletes Bash/ZSH logs
-# -Astro
-msg 'Clearing Bash/ZSH history...'
-rm -fv ~/.bash_history &>/dev/null
-rm -fv ~/.zhistory &>/dev/null
-
 # Deletes Cacher logs
 # I dunno either
 # -Astro
