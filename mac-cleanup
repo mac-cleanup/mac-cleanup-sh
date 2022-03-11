@@ -184,7 +184,7 @@ fi
 
 if type "composer" &>/dev/null; then
 	msg 'Cleaning up composer...'
-	composer clearcache &>/dev/null
+	composer clearcache --no-interaction &>/dev/null
 fi
 
 # Deletes Steam caches, logs, and temp files
