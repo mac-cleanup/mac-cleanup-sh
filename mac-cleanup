@@ -343,8 +343,8 @@ fi
 if [ -d ~/wget-log ]; then
 	if [ -z "$dry_run" ]; then
     msg 'Deleting Wget log and hosts file...'
-    rm -fv ~/wget-log &>/dev/null
-    rm -fv ~/.wget-hsts &>/dev/null
+    rm -rfv ~/wget-log &>/dev/null
+    rm -rfv ~/.wget-hsts &>/dev/null
   else
     count_dry "$HOME/wget-log"
     count_dry "$HOME/.wget-hsts"
@@ -357,7 +357,7 @@ fi
 if [ -d ~/.cacher ]; then
 	if [ -z "$dry_run" ]; then
     msg 'Deleting Cacher logs...'
-    rm -rfv ~/.cacher/logs
+    rm -rfv ~/.cacher/logs &>/dev/null
   else
     count_dry "$HOME/.cacher/logs"
   fi
@@ -368,7 +368,7 @@ fi
 if [ -d ~/.android ]; then
 	if [ -z "$dry_run" ]; then
     msg 'Deleting Android cache...'
-    rm -rfv ~/.android/cache
+    rm -rfv ~/.android/cache &>/dev/null
   else
     count_dry "$HOME/.android/cache"
   fi
@@ -379,7 +379,7 @@ fi
 if [ -d ~/.gradle ]; then
 	if [ -z "$dry_run" ]; then
     msg 'Clearing Gradle caches...'
-    rm -rfv ~/.gradle/caches
+    rm -rfv ~/.gradle/caches &>/dev/null
   else
     count_dry "$HOME/.gradle/caches"
   fi
@@ -390,7 +390,7 @@ fi
 if [ -d ~/.kite ]; then
 	if [ -z "$dry_run" ]; then
     msg 'Deleting Kite logs...'
-    rm -rfv ~/.kite/logs
+    rm -rfv ~/.kite/logs &>/dev/null
   else
     count_dry "$HOME/.kite/logs"
   fi
@@ -406,7 +406,7 @@ if type "brew" &>/dev/null; then
 	if [ -z "$dry_run" ]; then
     msg 'Cleaning up Homebrew Cache...'
     brew cleanup -s &>/dev/null
-    rm -rfv "$(brew --cache)"
+    rm -rfv "$(brew --cache)" &>/dev/null
     brew tap --repair &>/dev/null
   else
     count_dry "$(brew --cache)"
