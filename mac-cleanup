@@ -105,33 +105,32 @@ bytesToHuman() {
 }
 
 count_dry() {
-  if [ -d "$i" ] || [ -f "$i" ]; then  # du throws lots of errors in .sh, wierd...
-    if [ -n "$dry_results" ]; then
-      temp_dry_results=$(sudo du -sAk "$i" | awk '{ print $1 }') &>/dev/null
-      dry_results="$((dry_results+temp_dry_results))"
-    else
-      dry_results="$(sudo du -sAk "$i" | awk '{ print $1 }')" &>/dev/null
+  for path in "${path_list[@]}"; do
+    # shellcheck disable=SC2086
+    if ls $path 1> /dev/null 2>&1; then
+      if [ -n "$dry_results" ]; then
+        # shellcheck disable=SC2086
+        temp_dry_results=$(sudo du -cAk $path | tail -1 | awk '{ print $1 }')
+        dry_results="$((dry_results+temp_dry_results))"
+      else
+        dry_results=$(sudo du -cAk $path | tail -1 | awk '{ print $1 }')
+      fi
     fi
-  fi
+  done
 }
 
 remove_paths() {
   if [ -z "$dry_run" ]; then
-    # shellcheck disable=SC2116
-    # echo needed for zsh, it doesnt make new lines by default
-    for i in $( echo "$path_list" ); do
-      rm -rfv "$i" &>/dev/null
+    for path in "${path_list[@]}"; do
+      # shellcheck disable=SC2086
+      rm -rfv $path &>/dev/null
     done
     unset path_list
   fi
 }
 
 collect_paths() {
-  if [ -n "$path_list" ]; then
-    path_list="$path_list  $1"
-  else
-    path_list="$1"
-  fi
+  path_list+=("$@")
 }
 
 # Ask for the administrator password upfront
@@ -148,57 +147,57 @@ done 2>/dev/null &
 
 oldAvailable=$(df / | tail -1 | awk '{print $4}')
 
-collect_paths "/Volumes/*/.Trashes/*"
-collect_paths "$HOME/.Trash/*"
+collect_paths /Volumes/*/.Trashes/*
+collect_paths ~/.Trash/*
 msg 'Emptying the Trash 🗑 on all mounted volumes and the main HDD...'
 remove_paths
 
-collect_paths "/Library/Caches/*"
-collect_paths "/System/Library/Caches/*"
-collect_paths "$HOME/Library/Caches/*"
-collect_paths "/private/var/folders/bh/*/*/*/*"
+collect_paths /Library/Caches/*
+collect_paths /System/Library/Caches/*
+collect_paths ~/Library/Caches/*
+collect_paths /private/var/folders/bh/*/*/*/*
 msg 'Clearing System Cache Files...'
 remove_paths
 
-collect_paths "/private/var/log/asl/*.asl"
-collect_paths "/Library/Logs/DiagnosticReports/*"
-collect_paths "/Library/Logs/CreativeCloud/*"
-collect_paths "/Library/Logs/Adobe/*"
-collect_paths "/Library/Logs/adobegc.log"
-collect_paths "$HOME/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/*"
-collect_paths "$HOME/Library/Logs/CoreSimulator/*"
+collect_paths /private/var/log/asl/*.asl
+collect_paths /Library/Logs/DiagnosticReports/*
+collect_paths /Library/Logs/CreativeCloud/*
+collect_paths /Library/Logs/Adobe/*
+collect_paths /Library/Logs/adobegc.log
+collect_paths ~/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/*
+collect_paths ~/Library/Logs/CoreSimulator/*
 msg 'Clearing System Log Files...'
 remove_paths
 
 if [ -d ~/Library/Logs/JetBrains/ ]; then
-  collect_paths "$HOME/Library/Logs/JetBrains/*/"
+  collect_paths ~/Library/Logs/JetBrains/*/
   msg 'Clearing all application log files from JetBrains...'
   remove_paths
 fi
 
 if [ -d ~/Library/Application\ Support/Adobe/ ]; then
-  collect_paths "$HOME/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/*"
+  collect_paths ~/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/*
   msg 'Clearing Adobe Cache Files...'
   remove_paths
 fi
 
 if [ -d ~/Library/Application\ Support/Google/Chrome/ ]; then
-  collect_paths "$HOME/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/*"
+  collect_paths ~/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/*
   msg 'Clearing Google Chrome Cache Files...'
   remove_paths
 fi
 
-collect_paths "$HOME/Music/iTunes/iTunes\ Media/Mobile\ Applications/*"
+collect_paths ~/Music/iTunes/iTunes\ Media/Mobile\ Applications/*
 msg 'Cleaning up iOS Applications...'
 remove_paths
 
-collect_paths "$HOME/Library/Application\ Support/MobileSync/Backup/*"
+collect_paths ~/Library/Application\ Support/MobileSync/Backup/*
 msg 'Removing iOS Device Backups...'
 remove_paths
 
-collect_paths "$HOME/Library/Developer/Xcode/DerivedData/*"
-collect_paths "$HOME/Library/Developer/Xcode/Archives/*"
-collect_paths "$HOME/Library/Developer/Xcode/iOS Device Logs/*"
+collect_paths ~/Library/Developer/Xcode/DerivedData/*
+collect_paths ~/Library/Developer/Xcode/Archives/*
+collect_paths ~/Library/Developer/Xcode/iOS Device Logs/*
 msg 'Cleaning up XCode Derived Data and Archives...'
 remove_paths
 
@@ -210,18 +209,20 @@ if type "xcrun" &>/dev/null; then  # TODO add count_dry
     osascript -e 'tell application "Simulator" to quit' &>/dev/null
     xcrun simctl shutdown all &>/dev/null
     xcrun simctl erase all &>/dev/null
+#  else
+#    collect_paths ~/Library/Developer/CoreSimulator/Devices/*/data/*/
   fi
 fi
 
 # support deleting Dropbox Cache if they exist
 if [ -d "/Users/${HOST}/Dropbox" ]; then
-  collect_paths "$HOME/Dropbox/.dropbox.cache/*"
+  collect_paths ~/Dropbox/.dropbox.cache/*
   msg 'Clearing Dropbox 📦 Cache Files...'
   remove_paths
 fi
 
 if [ -d ~/Library/Application\ Support/Google/DriveFS/ ]; then
-  collect_paths "$HOME/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache"
+  collect_paths ~/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache
   msg 'Clearing Google Drive File Stream Cache Files...'
   killall "Google Drive File Stream"
   remove_paths
@@ -237,59 +238,62 @@ fi
 # Deletes Steam caches, logs, and temp files
 # -Astro
 if [ -d ~/Library/Application\ Support/Steam/ ]; then
-  collect_paths "$HOME/Library/Application\ Support/Steam/appcache"
-  collect_paths "$HOME/Library/Application\ Support/Steam/depotcache"
-  collect_paths "$HOME/Library/Application\ Support/Steam/logs"
-  collect_paths "$HOME/Library/Application\ Support/Steam/steamapps/shadercache"
-  collect_paths "$HOME/Library/Application\ Support/Steam/steamapps/temp"
-  collect_paths "$HOME/Library/Application\ Support/Steam/steamapps/download"
+  collect_paths ~/Library/Application\ Support/Steam/appcache
+  collect_paths ~/Library/Application\ Support/Steam/depotcache
+  collect_paths ~/Library/Application\ Support/Steam/logs
+  collect_paths ~/Library/Application\ Support/Steam/steamapps/shadercache
+  collect_paths ~/Library/Application\ Support/Steam/steamapps/temp
+  collect_paths ~/Library/Application\ Support/Steam/steamapps/download
   msg 'Clearing Steam Cache, Log, and Temp Files...'
   remove_paths
 fi
 
 # Deletes Minecraft logs
 # -Astro
-collect_paths "$HOME/Library/Application\ Support/minecraft/logs"
-collect_paths "$HOME/Library/Application\ Support/minecraft/crash-reports"
-collect_paths "$HOME/Library/Application\ Support/minecraft/webcache"
-collect_paths "$HOME/Library/Application\ Support/minecraft/webcache2"
-collect_paths "$HOME/Library/Application\ Support/minecraft/crash-reports"
-collect_paths "$HOME/Library/Application\ Support/minecraft/*.log"
-collect_paths "$HOME/Library/Application\ Support/minecraft/launcher_cef_log.txt"
 if [ -d ~/Library/Application\ Support/minecraft ]; then
+  collect_paths ~/Library/Application\ Support/minecraft/logs
+  collect_paths ~/Library/Application\ Support/minecraft/crash-reports
+  collect_paths ~/Library/Application\ Support/minecraft/webcache
+  collect_paths ~/Library/Application\ Support/minecraft/webcache2
+  collect_paths ~/Library/Application\ Support/minecraft/crash-reports
+  collect_paths ~/Library/Application\ Support/minecraft/*.log
+  collect_paths ~/Library/Application\ Support/minecraft/launcher_cef_log.txt
   if [ -d ~/Library/Application\ Support/minecraft/.mixin.out ]; then
-    collect_paths "$HOME/Library/Application\ Support/minecraft/.mixin.out"
+    collect_paths ~/Library/Application\ Support/minecraft/.mixin.out
   fi
   msg 'Clearing Minecraft Cache and Log Files...'
   remove_paths
 fi
 
+
 # Deletes Lunar Client logs (Minecraft alternate client)
 # -Astro
 if [ -d ~/.lunarclient ]; then
-  collect_paths "$HOME/.lunarclient/game-cache"
-  collect_paths "$HOME/.lunarclient/launcher-cache"
-  collect_paths "$HOME/.lunarclient/logs"
-  collect_paths "$HOME/.lunarclient/offline/*/logs"
-  collect_paths "$HOME/.lunarclient/offline/files/*/logs"
+  collect_paths ~/.lunarclient/game-cache
+  collect_paths ~/.lunarclient/launcher-cache
+  collect_paths ~/.lunarclient/logs
+  collect_paths ~/.lunarclient/offline/*/logs
+  collect_paths ~/.lunarclient/offline/files/*/logs
   msg 'Deleting Lunar Client logs and caches...'
   remove_paths
 fi
 
+
 # Deletes Wget logs
 # -Astro
 if [ -d ~/wget-log ]; then
-  collect_paths "$HOME/wget-log"
-  collect_paths "$HOME/.wget-hsts"
+  collect_paths ~/wget-log
+  collect_paths ~/.wget-hsts
   msg 'Deleting Wget log and hosts file...'
   remove_paths
 fi
+
 
 # Deletes Cacher logs
 # I dunno either
 # -Astro
 if [ -d ~/.cacher ]; then
-  collect_paths "$HOME/.cacher/logs"
+  collect_paths ~/.cacher/logs
   msg 'Deleting Cacher logs...'
   remove_paths
 fi
@@ -297,7 +301,7 @@ fi
 # Deletes Android (studio?) cache
 # -Astro
 if [ -d ~/.android ]; then
-  collect_paths "$HOME/.android/cache"
+  collect_paths ~/.android/cache
   msg 'Deleting Android cache...'
   remove_paths
 fi
@@ -305,7 +309,7 @@ fi
 # Clears Gradle caches
 # -Astro
 if [ -d ~/.gradle ]; then
-  collect_paths "$HOME/.gradle/caches"
+  collect_paths ~/.gradle/caches
   msg 'Clearing Gradle caches...'
   remove_paths
 fi
@@ -313,7 +317,7 @@ fi
 # Deletes Kite Autocomplete logs
 # -Astro
 if [ -d ~/.kite ]; then
-  collect_paths "$HOME/.kite/logs"
+  collect_paths ~/.kite/logs
   msg 'Deleting Kite logs...'
   remove_paths
 fi
@@ -390,18 +394,18 @@ fi
 # Deletes all Microsoft Teams Caches and resets it to default - can fix also some performance issues
 # -Astro
 if [ -d ~/Library/Application\ Support/Microsoft/Teams ]; then
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/IndexedDB"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/Cache"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/Application\ Cache"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/Code\ Cache"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/blob_storage"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/databases"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/gpucache"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/Local\ Storage"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/tmp"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/*logs*.txt"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/watchdog"
-  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/*watchdog*.json"
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/IndexedDB
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/Cache
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/Application\ Cache
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/Code\ Cache
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/blob_storage
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/databases
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/gpucache
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/Local\ Storage
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/tmp
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/*logs*.txt
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/watchdog
+  collect_paths ~/Library/Application\ Support/Microsoft/Teams/*watchdog*.json
   msg 'Deleting Microsoft Teams logs and caches...'
   remove_paths
 fi
@@ -425,9 +429,7 @@ if [ -z "$dry_run" ]; then
   bytesToHuman $count
   cleanup
 else
-  for i in $( echo "$path_list" ); do
-    count_dry "$i"
-  done
+  count_dry
   unset dry_run
   if [ -n "$dry_results" ]; then
     bytesToHuman "$dry_results"
