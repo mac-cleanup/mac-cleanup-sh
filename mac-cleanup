@@ -37,7 +37,9 @@ setup_colors() {
 }
 
 msg() {
-	echo >&2 -e "${1-}"
+  if [ -z "$dry_run" ]; then
+	  echo >&2 -e "${1-}"
+	fi
 }
 
 die() {
@@ -95,7 +97,7 @@ bytesToHuman() {
 		b=$((b / 1024))
 		((s++))
 	done
-	if [ -z "$dry_run" ]; then
+	if [ -z "$dry_results" ]; then
     msg "$b$d ${S[$s]} of space was cleaned up"
   else
     msg "Approx $b$d ${S[$s]} of space will be cleaned up"
@@ -103,13 +105,32 @@ bytesToHuman() {
 }
 
 count_dry() {
-  if [ -d "$1" ] || [ -f "$1" ]; then  # du throws lots of errors in .sh, wierd...
+  if [ -d "$i" ] || [ -f "$i" ]; then  # du throws lots of errors in .sh, wierd...
     if [ -n "$dry_results" ]; then
-      temp_dry_results=$(sudo du -sAk "$1" | awk '{ print $1 }')
+      temp_dry_results=$(sudo du -sAk "$i" | awk '{ print $1 }') &>/dev/null
       dry_results="$((dry_results+temp_dry_results))"
     else
-      dry_results="$(sudo du -sAk "$1" | awk '{ print $1 }')"
+      dry_results="$(sudo du -sAk "$i" | awk '{ print $1 }')" &>/dev/null
     fi
+  fi
+}
+
+remove_paths() {
+  if [ -z "$dry_run" ]; then
+    # shellcheck disable=SC2116
+    # echo needed for zsh, it doesnt make new lines by default
+    for i in $( echo "$path_list" ); do
+      rm -rfv "$i" &>/dev/null
+    done
+    unset path_list
+  fi
+}
+
+collect_paths() {
+  if [ -n "$path_list" ]; then
+    path_list="$path_list  $1"
+  else
+    path_list="$1"
   fi
 }
 
@@ -125,103 +146,64 @@ while true; do
 	kill -0 "$$" || exit
 done 2>/dev/null &
 
-if [ -z "$dry_run" ]; then
-  oldAvailable=$(df / | tail -1 | awk '{print $4}')
+oldAvailable=$(df / | tail -1 | awk '{print $4}')
 
-  msg 'Emptying the Trash 🗑 on all mounted volumes and the main HDD...'
-  sudo rm -rfv /Volumes/*/.Trashes/* &>/dev/null
-  sudo rm -rfv ~/.Trash/* &>/dev/null
-else
-  count_dry "/Volumes/*/.Trashes/*"
-  count_dry "$HOME/.Trash/*"
-fi
+collect_paths "/Volumes/*/.Trashes/*"
+collect_paths "$HOME/.Trash/*"
+msg 'Emptying the Trash 🗑 on all mounted volumes and the main HDD...'
+remove_paths
 
-if [ -z "$dry_run" ]; then
-  msg 'Clearing System Cache Files...'
-  sudo rm -rfv /Library/Caches/* &>/dev/null
-  sudo rm -rfv /System/Library/Caches/* &>/dev/null
-  sudo rm -rfv ~/Library/Caches/* &>/dev/null
-  sudo rm -rfv /private/var/folders/bh/*/*/*/* &>/dev/null
-else
-  count_dry "/Library/Caches/*"
-  count_dry "/System/Library/Caches/*"
-  count_dry "$HOME/Library/Caches/*"
-  count_dry "/private/var/folders/bh/*/*/*/*"
-fi
+collect_paths "/Library/Caches/*"
+collect_paths "/System/Library/Caches/*"
+collect_paths "$HOME/Library/Caches/*"
+collect_paths "/private/var/folders/bh/*/*/*/*"
+msg 'Clearing System Cache Files...'
+remove_paths
 
-if [ -z "$dry_run" ]; then
-  msg 'Clearing System Log Files...'
-  sudo rm -rfv /private/var/log/asl/*.asl &>/dev/null
-  sudo rm -rfv /Library/Logs/DiagnosticReports/* &>/dev/null
-  sudo rm -rfv /Library/Logs/CreativeCloud/* &>/dev/null
-  sudo rm -rfv /Library/Logs/Adobe/* &>/dev/null
-  sudo rm -fv /Library/Logs/adobegc.log &>/dev/null
-  rm -rfv ~/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/* &>/dev/null
-  rm -rfv ~/Library/Logs/CoreSimulator/* &>/dev/null
-else
-  count_dry "/private/var/log/asl/*.asl"
-  count_dry "/Library/Logs/DiagnosticReports/*"
-  count_dry "/Library/Logs/CreativeCloud/*"
-  count_dry "/Library/Logs/Adobe/*"
-  count_dry "/Library/Logs/adobegc.log"
-  count_dry "$HOME/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/*"
-  count_dry "$HOME/Library/Logs/CoreSimulator/*"
-fi
+collect_paths "/private/var/log/asl/*.asl"
+collect_paths "/Library/Logs/DiagnosticReports/*"
+collect_paths "/Library/Logs/CreativeCloud/*"
+collect_paths "/Library/Logs/Adobe/*"
+collect_paths "/Library/Logs/adobegc.log"
+collect_paths "$HOME/Library/Containers/com.apple.mail/Data/Library/Logs/Mail/*"
+collect_paths "$HOME/Library/Logs/CoreSimulator/*"
+msg 'Clearing System Log Files...'
+remove_paths
 
 if [ -d ~/Library/Logs/JetBrains/ ]; then
-  if [ -z "$dry_run" ]; then
-    msg 'Clearing all application log files from JetBrains...'
-    rm -rfc ~/Library/Logs/JetBrains/*/ &>/dev/null
-  else
-    count_dry "$HOME/Library/Logs/JetBrains/*/"
-  fi
+  collect_paths "$HOME/Library/Logs/JetBrains/*/"
+  msg 'Clearing all application log files from JetBrains...'
+  remove_paths
 fi
 
 if [ -d ~/Library/Application\ Support/Adobe/ ]; then
+  collect_paths "$HOME/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/*"
   msg 'Clearing Adobe Cache Files...'
-  if [ -z "$dry_run" ]; then
-    sudo rm -rfv ~/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/* &>/dev/null
-  else
-    count_dry "$HOME/Library/Application\ Support/Adobe/Common/Media\ Cache\ Files/*"
-  fi
+  remove_paths
 fi
 
 if [ -d ~/Library/Application\ Support/Google/Chrome/ ]; then
-  if [ -z "$dry_run" ]; then
-    msg 'Clearing Google Chrome Cache Files...'
-    sudo rm -rfv ~/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/* &>/dev/null
-  else
-    count_dry "$HOME/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/*"
-  fi
+  collect_paths "$HOME/Library/Application\ Support/Google/Chrome/Default/Application\ Cache/*"
+  msg 'Clearing Google Chrome Cache Files...'
+  remove_paths
 fi
 
-if [ -z "$dry_run" ]; then
-  msg 'Cleaning up iOS Applications...'
-  rm -rfv ~/Music/iTunes/iTunes\ Media/Mobile\ Applications/* &>/dev/null
-else
-  count_dry "$HOME/Music/iTunes/iTunes\ Media/Mobile\ Applications/*"
-fi
+collect_paths "$HOME/Music/iTunes/iTunes\ Media/Mobile\ Applications/*"
+msg 'Cleaning up iOS Applications...'
+remove_paths
 
-if [ -z "$dry_run" ]; then
-  msg 'Removing iOS Device Backups...'
-  rm -rfv ~/Library/Application\ Support/MobileSync/Backup/* &>/dev/null
-else
-  count_dry "$HOME/Library/Application\ Support/MobileSync/Backup/*"
-fi
+collect_paths "$HOME/Library/Application\ Support/MobileSync/Backup/*"
+msg 'Removing iOS Device Backups...'
+remove_paths
 
-if [ -z "$dry_run" ]; then
-  msg 'Cleaning up XCode Derived Data and Archives...'
-  rm -rfv ~/Library/Developer/Xcode/DerivedData/* &>/dev/null
-  rm -rfv ~/Library/Developer/Xcode/Archives/* &>/dev/null
-  rm -rfv ~/Library/Developer/Xcode/iOS Device Logs/* &>/dev/null
-else
-  count_dry "$HOME/Library/Developer/Xcode/DerivedData/*"
-  count_dry "$HOME/Library/Developer/Xcode/Archives/*"
-  count_dry "$HOME/Library/Developer/Xcode/iOS Device Logs/*"
-fi
+collect_paths "$HOME/Library/Developer/Xcode/DerivedData/*"
+collect_paths "$HOME/Library/Developer/Xcode/Archives/*"
+collect_paths "$HOME/Library/Developer/Xcode/iOS Device Logs/*"
+msg 'Cleaning up XCode Derived Data and Archives...'
+remove_paths
 
 if type "xcrun" &>/dev/null; then  # TODO add count_dry
-	if [ -z "$dry_run" ]; then
+  if [ -z "$dry_run" ]; then
     msg 'Cleaning up iOS Simulators...'
     osascript -e 'tell application "com.apple.CoreSimulator.CoreSimulatorService" to quit' &>/dev/null
     osascript -e 'tell application "iOS Simulator" to quit' &>/dev/null
@@ -231,38 +213,22 @@ if type "xcrun" &>/dev/null; then  # TODO add count_dry
   fi
 fi
 
-# support deleting gradle caches
-if [ -d "/Users/${HOST}/.gradle/caches" ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Cleaning up Gradle cache...'
-	  rm -rfv ~/.gradle/caches/ &>/dev/null
-	else
-	  count_dry "$HOME/.gradle/caches/"
-	fi
-fi
-
 # support deleting Dropbox Cache if they exist
 if [ -d "/Users/${HOST}/Dropbox" ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Clearing Dropbox 📦 Cache Files...'
-	  sudo rm -rfv ~/Dropbox/.dropbox.cache/* &>/dev/null
-	else
-	  count_dry "$HOME/Dropbox/.dropbox.cache/*"
-	fi
+  collect_paths "$HOME/Dropbox/.dropbox.cache/*"
+  msg 'Clearing Dropbox 📦 Cache Files...'
+  remove_paths
 fi
 
 if [ -d ~/Library/Application\ Support/Google/DriveFS/ ]; then
-  if [ -z "$dry_run" ]; then
-    msg 'Clearing Google Drive File Stream Cache Files...'
-    killall "Google Drive File Stream"
-    rm -rfv ~/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache &>/dev/null
-  else
-    count_dry "$HOME/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache"
-  fi
+  collect_paths "$HOME/Library/Application\ Support/Google/DriveFS/[0-9a-zA-Z]*/content_cache"
+  msg 'Clearing Google Drive File Stream Cache Files...'
+  killall "Google Drive File Stream"
+  remove_paths
 fi
 
 if type "composer" &>/dev/null; then  # TODO add count_dry
-	if [ -z "$dry_run" ]; then
+  if [ -z "$dry_run" ]; then
     msg 'Cleaning up composer...'
     composer clearcache --no-interaction &>/dev/null
   fi
@@ -271,157 +237,114 @@ fi
 # Deletes Steam caches, logs, and temp files
 # -Astro
 if [ -d ~/Library/Application\ Support/Steam/ ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Clearing Steam Cache, Log, and Temp Files...'
-    rm -rfv ~/Library/Application\ Support/Steam/appcache &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Steam/depotcache &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Steam/logs &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Steam/steamapps/shadercache &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Steam/steamapps/temp &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Steam/steamapps/download &>/dev/null
-  else
-    count_dry "$HOME/Library/Application\ Support/Steam/appcache"
-    count_dry "$HOME/Library/Application\ Support/Steam/depotcache"
-    count_dry "$HOME/Library/Application\ Support/Steam/logs"
-    count_dry "$HOME/Library/Application\ Support/Steam/steamapps/shadercache"
-    count_dry "$HOME/Library/Application\ Support/Steam/steamapps/temp"
-    count_dry "$HOME/Library/Application\ Support/Steam/steamapps/download"
-  fi
+  collect_paths "$HOME/Library/Application\ Support/Steam/appcache"
+  collect_paths "$HOME/Library/Application\ Support/Steam/depotcache"
+  collect_paths "$HOME/Library/Application\ Support/Steam/logs"
+  collect_paths "$HOME/Library/Application\ Support/Steam/steamapps/shadercache"
+  collect_paths "$HOME/Library/Application\ Support/Steam/steamapps/temp"
+  collect_paths "$HOME/Library/Application\ Support/Steam/steamapps/download"
+  msg 'Clearing Steam Cache, Log, and Temp Files...'
+  remove_paths
 fi
 
 # Deletes Minecraft logs
 # -Astro
+collect_paths "$HOME/Library/Application\ Support/minecraft/logs"
+collect_paths "$HOME/Library/Application\ Support/minecraft/crash-reports"
+collect_paths "$HOME/Library/Application\ Support/minecraft/webcache"
+collect_paths "$HOME/Library/Application\ Support/minecraft/webcache2"
+collect_paths "$HOME/Library/Application\ Support/minecraft/crash-reports"
+collect_paths "$HOME/Library/Application\ Support/minecraft/*.log"
+collect_paths "$HOME/Library/Application\ Support/minecraft/launcher_cef_log.txt"
 if [ -d ~/Library/Application\ Support/minecraft ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Clearing Minecraft Cache and Log Files...'
-    rm -rfv ~/Library/Application\ Support/minecraft/logs &>/dev/null
-    rm -rfv ~/Library/Application\ Support/minecraft/crash-reports &>/dev/null
-    rm -rfv ~/Library/Application\ Support/minecraft/webcache &>/dev/null
-    rm -rfv ~/Library/Application\ Support/minecraft/webcache2 &>/dev/null
-    rm -rfv ~/Library/Application\ Support/minecraft/crash-reports &>/dev/null
-    rm -rfv ~/Library/Application\ Support/minecraft/*.log &>/dev/null
-    rm -rfv ~/Library/Application\ Support/minecraft/launcher_cef_log.txt &>/dev/null
-  else
-    count_dry "$HOME/Library/Application\ Support/minecraft/logs"
-    count_dry "$HOME/Library/Application\ Support/minecraft/crash-reports"
-    count_dry "$HOME/Library/Application\ Support/minecraft/webcache"
-    count_dry "$HOME/Library/Application\ Support/minecraft/webcache2"
-    count_dry "$HOME/Library/Application\ Support/minecraft/crash-reports"
-    count_dry "$HOME/Library/Application\ Support/minecraft/*.log"
-    count_dry "$HOME/Library/Application\ Support/minecraft/launcher_cef_log.txt"
+  if [ -d ~/Library/Application\ Support/minecraft/.mixin.out ]; then
+    collect_paths "$HOME/Library/Application\ Support/minecraft/.mixin.out"
   fi
-	if [ -d ~/Library/Application\ Support/minecraft/.mixin.out ]; then
-		if [ -z "$dry_run" ]; then
-		  rm -rfv ~/Library/Application\ Support/minecraft/.mixin.out &>/dev/null
-		else
-		  count_dry "$HOME/Library/Application\ Support/minecraft/.mixin.out"
-		fi
-	fi
+  msg 'Clearing Minecraft Cache and Log Files...'
+  remove_paths
 fi
 
 # Deletes Lunar Client logs (Minecraft alternate client)
 # -Astro
 if [ -d ~/.lunarclient ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Deleting Lunar Client logs and caches...'
-    rm -rfv ~/.lunarclient/game-cache &>/dev/null
-    rm -rfv ~/.lunarclient/launcher-cache &>/dev/null
-    rm -rfv ~/.lunarclient/logs &>/dev/null
-    rm -rfv ~/.lunarclient/offline/*/logs &>/dev/null
-    rm -rfv ~/.lunarclient/offline/files/*/logs &>/dev/null
-  else
-    count_dry "$HOME/.lunarclient/game-cache"
-    count_dry "$HOME/.lunarclient/launcher-cache"
-    count_dry "$HOME/.lunarclient/logs"
-    count_dry "$HOME/.lunarclient/offline/*/logs"
-    count_dry "$HOME/.lunarclient/offline/files/*/logs"
-  fi
+  collect_paths "$HOME/.lunarclient/game-cache"
+  collect_paths "$HOME/.lunarclient/launcher-cache"
+  collect_paths "$HOME/.lunarclient/logs"
+  collect_paths "$HOME/.lunarclient/offline/*/logs"
+  collect_paths "$HOME/.lunarclient/offline/files/*/logs"
+  msg 'Deleting Lunar Client logs and caches...'
+  remove_paths
 fi
 
 # Deletes Wget logs
 # -Astro
 if [ -d ~/wget-log ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Deleting Wget log and hosts file...'
-    rm -rfv ~/wget-log &>/dev/null
-    rm -rfv ~/.wget-hsts &>/dev/null
-  else
-    count_dry "$HOME/wget-log"
-    count_dry "$HOME/.wget-hsts"
-  fi
+  collect_paths "$HOME/wget-log"
+  collect_paths "$HOME/.wget-hsts"
+  msg 'Deleting Wget log and hosts file...'
+  remove_paths
 fi
 
 # Deletes Cacher logs
 # I dunno either
 # -Astro
 if [ -d ~/.cacher ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Deleting Cacher logs...'
-    rm -rfv ~/.cacher/logs &>/dev/null
-  else
-    count_dry "$HOME/.cacher/logs"
-  fi
+  collect_paths "$HOME/.cacher/logs"
+  msg 'Deleting Cacher logs...'
+  remove_paths
 fi
 
 # Deletes Android (studio?) cache
 # -Astro
 if [ -d ~/.android ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Deleting Android cache...'
-    rm -rfv ~/.android/cache &>/dev/null
-  else
-    count_dry "$HOME/.android/cache"
-  fi
+  collect_paths "$HOME/.android/cache"
+  msg 'Deleting Android cache...'
+  remove_paths
 fi
 
 # Clears Gradle caches
 # -Astro
 if [ -d ~/.gradle ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Clearing Gradle caches...'
-    rm -rfv ~/.gradle/caches &>/dev/null
-  else
-    count_dry "$HOME/.gradle/caches"
-  fi
+  collect_paths "$HOME/.gradle/caches"
+  msg 'Clearing Gradle caches...'
+  remove_paths
 fi
 
 # Deletes Kite Autocomplete logs
 # -Astro
 if [ -d ~/.kite ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Deleting Kite logs...'
-    rm -rfv ~/.kite/logs &>/dev/null
-  else
-    count_dry "$HOME/.kite/logs"
-  fi
+  collect_paths "$HOME/.kite/logs"
+  msg 'Deleting Kite logs...'
+  remove_paths
 fi
 
 if type "brew" &>/dev/null; then
-	if [ "$update" = true ]; then
-		msg 'Updating Homebrew Recipes...'
-		brew update &>/dev/null
-		msg 'Upgrading and removing outdated formulae...'
-		brew upgrade &>/dev/null
-	fi
-	if [ -z "$dry_run" ]; then
-    msg 'Cleaning up Homebrew Cache...'
+  if [ "$update" = true ]; then
+    msg 'Updating Homebrew Recipes...'
+    brew update &>/dev/null
+    msg 'Upgrading and removing outdated formulae...'
+    brew upgrade &>/dev/null
+  fi
+  collect_paths "$(brew --cache)"
+  msg 'Cleaning up Homebrew Cache...'
+  if [ -z "$dry_run" ]; then
     brew cleanup -s &>/dev/null
-    rm -rfv "$(brew --cache)" &>/dev/null
+    remove_paths
     brew tap --repair &>/dev/null
   else
-    count_dry "$(brew --cache)"
+    remove_paths
   fi
 fi
 
 if type "gem" &>/dev/null; then  # TODO add count_dry
-	if [ -z "$dry_run" ]; then
+  if [ -z "$dry_run" ]; then
     msg 'Cleaning up any old versions of gems'
     gem cleanup &>/dev/null
   fi
 fi
 
 if type "docker" &>/dev/null; then  # TODO add count_dry
-	if [ -z "$dry_run" ]; then
+  if [ -z "$dry_run" ]; then
     if ! docker ps >/dev/null 2>&1; then
       open --background -a Docker
     fi
@@ -431,37 +354,34 @@ if type "docker" &>/dev/null; then  # TODO add count_dry
 fi
 
 if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Removing Pyenv-VirtualEnv Cache...'
-    rm -rfv "$PYENV_VIRTUALENV_CACHE_PATH" &>/dev/null
-  else
-    count_dry "$PYENV_VIRTUALENV_CACHE_PATH"
-  fi
+  collect_paths "$PYENV_VIRTUALENV_CACHE_PATH"
+  msg 'Removing Pyenv-VirtualEnv Cache...'
+  remove_paths
 fi
 
 if type "npm" &>/dev/null; then  # TODO add count_dry
-	if [ -z "$dry_run" ]; then
+  if [ -z "$dry_run" ]; then
     msg 'Cleaning up npm cache...'
     npm cache clean --force &>/dev/null
   fi
 fi
 
 if type "yarn" &>/dev/null; then  # TODO add count_dry
-	if [ -z "$dry_run" ]; then
+  if [ -z "$dry_run" ]; then
     msg 'Cleaning up Yarn Cache...'
     yarn cache clean --force &>/dev/null
   fi
 fi
 
 if type "pod" &>/dev/null; then  # TODO add count_dry
-	if [ -z "$dry_run" ]; then
+  if [ -z "$dry_run" ]; then
     msg 'Cleaning up Pod Cache...'
     pod cache clean --all &>/dev/null
   fi
 fi
 
 if type "go" &>/dev/null; then  # TODO add count_dry
-	if [ -z "$dry_run" ]; then
+  if [ -z "$dry_run" ]; then
     msg 'Clearing Go module cache...'
     go clean -modcache &>/dev/null
   fi
@@ -470,34 +390,20 @@ fi
 # Deletes all Microsoft Teams Caches and resets it to default - can fix also some performance issues
 # -Astro
 if [ -d ~/Library/Application\ Support/Microsoft/Teams ]; then
-	if [ -z "$dry_run" ]; then
-    msg 'Deleting Microsoft Teams logs and caches...'
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/IndexedDB &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/Cache &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/Application\ Cache &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/Code\ Cache &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/blob_storage &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/databases &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/gpucache &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/Local\ Storage &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/tmp &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/*logs*.txt &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/watchdog &>/dev/null
-    rm -rfv ~/Library/Application\ Support/Microsoft/Teams/*watchdog*.json &>/dev/null
-  else
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/IndexedDB"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/Cache"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/Application\ Cache"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/Code\ Cache"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/blob_storage"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/databases"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/gpucache"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/Local\ Storage"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/tmp"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/*logs*.txt"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/watchdog"
-    count_dry "$HOME/Library/Application\ Support/Microsoft/Teams/*watchdog*.json"
-  fi
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/IndexedDB"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/Cache"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/Application\ Cache"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/Code\ Cache"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/blob_storage"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/databases"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/gpucache"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/Local\ Storage"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/tmp"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/*logs*.txt"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/watchdog"
+  collect_paths "$HOME/Library/Application\ Support/Microsoft/Teams/*watchdog*.json"
+  msg 'Deleting Microsoft Teams logs and caches...'
+  remove_paths
 fi
 
 if [ -z "$dry_run" ]; then
@@ -517,7 +423,12 @@ if [ -z "$dry_run" ]; then
   newAvailable=$(df / | tail -1 | awk '{print $4}')
   count=$((newAvailable - oldAvailable))
   bytesToHuman $count
+  cleanup
 else
+  for i in $( echo "$path_list" ); do
+    count_dry "$i"
+  done
+  unset dry_run
   if [ -n "$dry_results" ]; then
     bytesToHuman "$dry_results"
     msg "Continue? [enter]"
@@ -526,9 +437,7 @@ else
       exec "$0"
     fi
   else
-    echo "Error occured with dry run..."
+    echo "Error occurred with dry run..."
     exit 1
   fi
 fi
-
-cleanup
