@@ -258,7 +258,6 @@ if [ -d ~/Library/Application\ Support/minecraft ]; then
   remove_paths
 fi
 
-
 # Deletes Lunar Client logs (Minecraft alternate client)
 # -Astro
 if [ -d ~/.lunarclient ]; then
@@ -271,7 +270,6 @@ if [ -d ~/.lunarclient ]; then
   remove_paths
 fi
 
-
 # Deletes Wget logs
 # -Astro
 if [ -d ~/wget-log ]; then
@@ -280,7 +278,6 @@ if [ -d ~/wget-log ]; then
   msg 'Deleting Wget log and hosts file...'
   remove_paths
 fi
-
 
 # Deletes Cacher logs
 # I dunno either
@@ -424,15 +421,10 @@ if [ -z "$dry_run" ]; then
 else
   count_dry
   unset dry_run
-  if [ -n "$dry_results" ]; then
-    bytesToHuman "$dry_results"
-    msg "Continue? [enter]"
-    read -r -s -n 1 clean_after_dry_run
-    if [[ $clean_after_dry_run = "" ]]; then
-      exec "$0"
-    fi
-  else
-    echo "Error occurred with dry run..."
-    exit 1
+  bytesToHuman "$dry_results"
+  msg "Continue? [enter]"
+  read -r -s -n 1 clean_dry_run
+  if [[ $clean_dry_run = "" ]]; then
+    exec "$0"
   fi
 fi
