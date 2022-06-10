@@ -138,6 +138,9 @@ while true; do
 	kill -0 "$$" || exit
 done 2>/dev/null &
 
+# Enable extended regex
+shopt -s extglob
+
 oldAvailable=$(df / | tail -1 | awk '{print $4}')
 
 collect_paths /Volumes/*/.Trashes/*
@@ -194,7 +197,7 @@ collect_paths ~/Library/Developer/Xcode/iOS Device Logs/*
 msg 'Cleaning up XCode Derived Data and Archives...'
 remove_paths
 
-if type "xcrun" &>/dev/null; then  # TODO add count_dry
+if type "xcrun" &>/dev/null; then
   if [ -z "$dry_run" ]; then
     msg 'Cleaning up iOS Simulators...'
     osascript -e 'tell application "com.apple.CoreSimulator.CoreSimulatorService" to quit' &>/dev/null
@@ -202,8 +205,11 @@ if type "xcrun" &>/dev/null; then  # TODO add count_dry
     osascript -e 'tell application "Simulator" to quit' &>/dev/null
     xcrun simctl shutdown all &>/dev/null
     xcrun simctl erase all &>/dev/null
-#  else
-#    collect_paths ~/Library/Developer/CoreSimulator/Devices/*/data/*/
+  else
+    collect_paths ~/Library/Developer/CoreSimulator/Devices/*/data/!(Library|var|tmp|Media)
+    collect_paths /Users/wah/Library/Developer/CoreSimulator/Devices/*/data/Library/!(PreferencesCaches|Caches|AddressBook)
+    collect_paths ~/Library/Developer/CoreSimulator/Devices/*/data/Library/Caches/*
+    collect_paths ~/Library/Developer/CoreSimulator/Devices/*/data/Library/AddressBook/AddressBook*
   fi
 fi
 
@@ -221,10 +227,12 @@ if [ -d ~/Library/Application\ Support/Google/DriveFS/ ]; then
   remove_paths
 fi
 
-if type "composer" &>/dev/null; then  # TODO add count_dry
+if type "composer" &>/dev/null; then
   if [ -z "$dry_run" ]; then
     msg 'Cleaning up composer...'
     composer clearcache --no-interaction &>/dev/null
+  else
+    collect_paths ~/Library/Caches/composer
   fi
 fi
 
@@ -353,31 +361,43 @@ if [ "$PYENV_VIRTUALENV_CACHE_PATH" ]; then
   remove_paths
 fi
 
-if type "npm" &>/dev/null; then  # TODO add count_dry
+if type "npm" &>/dev/null; then
   if [ -z "$dry_run" ]; then
     msg 'Cleaning up npm cache...'
     npm cache clean --force &>/dev/null
+  else
+    collect_paths ~/.npm/*
   fi
 fi
 
-if type "yarn" &>/dev/null; then  # TODO add count_dry
+if type "yarn" &>/dev/null; then
   if [ -z "$dry_run" ]; then
     msg 'Cleaning up Yarn Cache...'
     yarn cache clean --force &>/dev/null
+  else
+    collect_paths ~Library/Caches/yarn
   fi
 fi
 
-if type "pod" &>/dev/null; then  # TODO add count_dry
+if type "pod" &>/dev/null; then
   if [ -z "$dry_run" ]; then
     msg 'Cleaning up Pod Cache...'
     pod cache clean --all &>/dev/null
+  else
+    collect_paths ~/Library/Caches/CocoaPods
   fi
 fi
 
-if type "go" &>/dev/null; then  # TODO add count_dry
+if type "go" &>/dev/null; then
   if [ -z "$dry_run" ]; then
     msg 'Clearing Go module cache...'
     go clean -modcache &>/dev/null
+  else
+    if [ -n "$GOPATH" ]; then
+      collect_paths "$GOPATH/pkg/mod"
+    else
+      collect_paths ~/go/pkg/mod
+    fi
   fi
 fi
 
@@ -401,15 +421,18 @@ if [ -d ~/Library/Application\ Support/Microsoft/Teams ]; then
 fi
 
 if [ -z "$dry_run" ]; then
-  msg 'Cleaning up DNS cache...'  # TODO add count_dry
+  msg 'Cleaning up DNS cache...'
   sudo dscacheutil -flushcache &>/dev/null
   sudo killall -HUP mDNSResponder &>/dev/null
 fi
 
 if [ -z "$dry_run" ]; then
-  msg 'Purging inactive memory...'  # TODO add count_dry
+  msg 'Purging inactive memory...'
   sudo purge &>/dev/null
 fi
+
+# Disables extended regex
+shopt -u extglob
 
 if [ -z "$dry_run" ]; then
   msg "${GREEN}Success!${NOFORMAT}"
@@ -425,6 +448,11 @@ else
   msg "Continue? [enter]"
   read -r -s -n 1 clean_dry_run
   if [[ $clean_dry_run = "" ]]; then
-    exec "$0"
+    if [ "$update" = true ]; then
+      exec "$0" --update
+    else
+      exec "$0"
+    fi
   fi
+  cleanup
 fi
