@@ -106,15 +106,9 @@ bytesToHuman() {
 
 count_dry() {
   for path in "${path_list[@]}"; do
-    # shellcheck disable=SC2086
-    if ls $path 1> /dev/null 2>&1; then
-      if [ -n "$dry_results" ]; then
-        # shellcheck disable=SC2086
-        temp_dry_results=$(sudo du -cAk $path | tail -1 | awk '{ print $1 }')
-        dry_results="$((dry_results+temp_dry_results))"
-      else
-        dry_results=$(sudo du -cAk $path | tail -1 | awk '{ print $1 }')
-      fi
+    if [ -d "$path" ] || [ -f "$path" ]; then
+      temp_dry_results=$(sudo du -cAk "$path" | tail -1 | awk '{ print $1 }')
+      dry_results="$((dry_results+temp_dry_results))"
     fi
   done
 }
@@ -122,8 +116,7 @@ count_dry() {
 remove_paths() {
   if [ -z "$dry_run" ]; then
     for path in "${path_list[@]}"; do
-      # shellcheck disable=SC2086
-      rm -rfv $path &>/dev/null
+      rm -rfv "$path" &>/dev/null
     done
     unset path_list
   fi
