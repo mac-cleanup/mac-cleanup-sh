@@ -1,5 +1,13 @@
 # mac-cleanup
-A cleanup script for macOS that runs the following tasks:
+
+### A cleanup script for macOS
+
+&nbsp;
+
+<details>
+  <summary>
+  What does script do?
+  </summary>
 
 * Empty the Trash on All Mounted Volumes and the Main HDD
 * Clear System Log Files
@@ -32,6 +40,10 @@ A cleanup script for macOS that runs the following tasks:
 * Deletes Kite logs
 * Clears Go module cache
 
+</details>
+
+
+
 ## Install Automatically
 
 ### Using homebrew
@@ -40,17 +52,32 @@ A cleanup script for macOS that runs the following tasks:
 brew tap fwartner/tap
 brew install fwartner/tap/mac-cleanup
 ```
+<details>
+  <summary>
+  Error: SHA256 mismatch
+  </summary>
+
+> If you'll see ```Error: SHA256 mismatch``` try this:
+> 1. Copy "Actual" hash from error
+> 2. Run ```brew edit fwartner/tap/mac-cleanup```
+> 3. Press ```I``` and change ```sha256 "<some hash>"``` with hash from step 1
+> 4. Press ```:```, then ```wq``` and ```Enter```
+> 5. Re-run installation \
+> ```brew install fwartner/tap/mac-cleanup```
+
+</details>
+
 
 ### Using curl
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh)"
+curl -fsSL https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh | bash -s install
 ```
 
 ### Using wget
 
 ```bash
-bash -c "$(wget https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh -O -)"
+wget https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh -O - | bash -s install
 ```
 
 ## Step by Step Install
@@ -64,14 +91,30 @@ If installing with curl you need to call `cleanup` instead of `mac-cleanup`.
 
 ## Update
 
+### Using curl
+
 ```bash
 curl -fsSL "https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh" | bash -s update
 ```
 
+### Using wget
+
+```bash
+wget "https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh" -O - | bash -s update
+```
+
 ## Uninstall
+
+### Using curl
 
 ```bash
 curl -fsSL "https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh" | bash -s uninstall
+```
+
+### Using wget
+
+```bash
+wget "https://raw.githubusercontent.com/mac-cleanup/mac-cleanup-sh/main/installer.sh" -O - | bash -s uninstall
 ```
 
 ## Usage Options
@@ -88,8 +131,10 @@ USAGE:
  mac-cleanup [FLAGS]
 
 FLAGS:
--h,   prints help menu
--n    no brew updates
+-h, --help       Prints help menu
+-d, --dry-run    Print approx space to be cleaned
+-v, --verbose    Print script debug info
+-u, --update     Run brew update
 ```
 
 ## Contributors
