@@ -375,7 +375,7 @@ if type "yarn" &>/dev/null; then
     msg 'Cleaning up Yarn Cache...'
     yarn cache clean --force &>/dev/null
   else
-    collect_paths ~Library/Caches/yarn
+    collect_paths ~/Library/Caches/yarn
   fi
 fi
 
@@ -419,6 +419,11 @@ if [ -d ~/Library/Application\ Support/Microsoft/Teams ]; then
   msg 'Deleting Microsoft Teams logs and caches...'
   remove_paths
 fi
+
+# Removes Java heap dumps
+collect_paths ~/*.hprof
+msg 'Deleting Java heap dumps...'
+remove_paths
 
 if [ -z "$dry_run" ]; then
   msg 'Cleaning up DNS cache...'
