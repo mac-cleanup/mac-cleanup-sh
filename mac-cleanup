@@ -420,6 +420,17 @@ if [ -d ~/Library/Application\ Support/Microsoft/Teams ]; then
   remove_paths
 fi
 
+# Deletes Poetry cache
+if type "poetry" &>/dev/null || [ -d ~/Library/Caches/pypoetry ]; then
+  # If poetry installed globally
+  if [ -z "$dry_run" ]; then
+    poetry cache clear --all
+  fi
+  collect_paths ~/Library/Caches/pypoetry
+  msg 'Deleting Poetry cache...'
+  remove_paths
+fi
+
 # Removes Java heap dumps
 collect_paths ~/*.hprof
 msg 'Deleting Java heap dumps...'
