@@ -2,12 +2,14 @@
 
 ### A cleanup script for macOS
 
-&nbsp;
+</br>
 
 <details>
   <summary>
   What does script do?
   </summary>
+
+</br>
 
 * Empty the Trash on All Mounted Volumes and the Main HDD
 * Clear System Log Files
@@ -39,6 +41,7 @@
 * Clears Gradle caches
 * Deletes Kite logs
 * Clears Go module cache
+* Clears Poetry cache
 
 </details>
 
