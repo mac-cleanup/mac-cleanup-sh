@@ -421,7 +421,7 @@ if [ -d ~/Library/Application\ Support/Microsoft/Teams ]; then
 fi
 
 # Deletes Poetry cache
-if type "poetry" &>/dev/null || [ -d ~/Library/Caches/pypoetry ]; then
+if [ -d ~/Library/Caches/pypoetry ]; then
   collect_paths ~/Library/Caches/pypoetry
   msg 'Deleting Poetry cache...'
   remove_paths
