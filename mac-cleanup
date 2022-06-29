@@ -107,7 +107,7 @@ bytesToHuman() {
 count_dry() {
   for path in "${path_list[@]}"; do
     if [ -d "$path" ] || [ -f "$path" ]; then
-      temp_dry_results=$(sudo du -cAk "$path" | tail -1 | awk '{ print $1 }')
+      temp_dry_results=$(sudo du -ck "$path" | tail -1 | awk '{ print $1 }')
       dry_results="$((dry_results+temp_dry_results))"
     fi
   done
@@ -422,10 +422,6 @@ fi
 
 # Deletes Poetry cache
 if type "poetry" &>/dev/null || [ -d ~/Library/Caches/pypoetry ]; then
-  # If poetry installed globally
-  if [ -z "$dry_run" ]; then
-    poetry cache clear --all
-  fi
   collect_paths ~/Library/Caches/pypoetry
   msg 'Deleting Poetry cache...'
   remove_paths
