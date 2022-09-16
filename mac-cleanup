@@ -379,6 +379,15 @@ if type "yarn" &>/dev/null; then
   fi
 fi
 
+if type "pnpm" &>/dev/null; then
+  if [ -z "$dry_run" ]; then
+    msg 'Cleaning up pnpm Cache...'
+    pnpm store prune &>/dev/null
+  else
+    collect_paths ~/.pnpm-store/*
+  fi
+fi
+
 if type "pod" &>/dev/null; then
   if [ -z "$dry_run" ]; then
     msg 'Cleaning up Pod Cache...'
