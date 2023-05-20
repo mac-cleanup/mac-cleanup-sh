@@ -348,10 +348,14 @@ fi
 if type "docker" &>/dev/null; then  # TODO add count_dry
   if [ -z "$dry_run" ]; then
     if ! docker ps >/dev/null 2>&1; then
+      close_docker=true
       open --background -a Docker
     fi
     msg 'Cleaning up Docker'
     docker system prune -af &>/dev/null
+    if [ "$close_docker" = true ]; then
+      killall Docker
+    fi
   fi
 fi
 
